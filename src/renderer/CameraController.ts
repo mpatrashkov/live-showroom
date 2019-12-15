@@ -6,7 +6,7 @@ export default class CameraController extends Controller {
 
     start() {
         this.orbitControls = new OrbitControls(Controller.mainCamera, Controller.renderer.domElement);
-        this.orbitControls.autoRotate = true;
+        //this.orbitControls.autoRotate = true;
     }
 
     update() {
