@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Home from './pages/home/Home';
 import Header from './components/header/Header';
+import Showroom from './pages/showroom/Showroom';
 
 // import * as three from "three";
 // import Renderer from './renderer/Renderer';
@@ -48,6 +49,9 @@ const App: React.FC = () => {
                 <Switch>
                     <Route path="/" exact>
                         <Home />
+                    </Route>
+                    <Route path="/showroom" exact>
+                        <Showroom />
                     </Route>
                 </Switch>
             </div>

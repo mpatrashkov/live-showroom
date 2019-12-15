@@ -1,4 +1,6 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2 } from "three";
+import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2, Color, Object3D } from "three";
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
@@ -17,7 +19,7 @@ export default class Renderer {
         this.mainCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new WebGLRenderer();
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
         window.onresize = () => {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -78,9 +80,8 @@ export default class Renderer {
             const intersects = raycaster.intersectObjects(Controller.scene.children, true);
 
             for(let intersect of intersects) {
-                const hitEntity = this.findEntityByName(intersect.object.name)
+                const hitEntity = this.findEntityByName(intersect.object.name);
                 hitEntity?.controllers.forEach(controller => controller.onClick())
-                
                 break;
             }
         }, true);

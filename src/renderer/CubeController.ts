@@ -1,5 +1,5 @@
 import Controller from "./Controller";
-import { BoxGeometry, MeshBasicMaterial, Mesh, Euler } from "three";
+import { BoxGeometry, MeshBasicMaterial, Mesh, Euler, Vector2 } from "three";
 import Time from "./utils/Time";
 
 export default class CubeController extends Controller {

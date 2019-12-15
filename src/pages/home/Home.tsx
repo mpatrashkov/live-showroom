@@ -6,8 +6,8 @@ import {Link} from 'react-router-dom'
 export default class Home extends React.Component {
     render() {
         return (
-            <div className="home">
-                <Carousel className="home-carousel">
+            <div className="home page">
+                <Carousel className="home-carousel" autoplay>
                     <div className="carousel-item">
                         <h3>WELCOME TO LIVE SHOWROOM</h3>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis pariatur mollitia eius enim odit? Ex sit ducimus laborum ratione rerum assumenda vero? Commodi et saepe aliquid quo doloremque facere repudiandae?</p>

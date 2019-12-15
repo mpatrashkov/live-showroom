@@ -13,7 +13,7 @@ export default class Header extends React.Component {
                         <Link to="/">Home</Link>
                     </Menu.Item>
                     <Menu.Item>
-                        <Link to="/showrrom">Showroom</Link>
+                        <Link to="/showroom">Showroom</Link>
                     </Menu.Item>
                     <Menu.Item>
                         <Link to="/playground">Playground</Link>
