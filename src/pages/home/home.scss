@@ -1,0 +1,63 @@
+.home-carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    
+    height: 70vh;
+
+    
+
+    .slick-list {
+        height: 100%;
+
+        .slick-track {
+            height: 100%;
+        }
+    }
+
+    .slick-slide.slick-active.slick-current {
+        height: 100%;
+    }
+
+    .carousel-item {
+        text-align: center;
+        color: white;
+        font-size: 2em;
+        padding: 0 5rem;
+        z-index: 20;
+    }
+}
+
+#root > div > div.home > div > div > div > div > div.slick-slide[data-index="0"] {
+    background-image: url('https://cholakov-gongalov.com/wp-content/uploads/2018/09/Showroom-2.jpg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position-y: 50%;
+    
+}
+
+#root > div > div.home > div > div > div > div > div.slick-slide[data-index="1"] {
+    background-image: url('https://cholakov-gongalov.com/wp-content/uploads/2018/09/Showroom-1.jpg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position-y: 50%;
+    
+}
+
+#root > div > div.home > div > div > div > div > div.slick-slide > div{
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    position: relative;
+
+    &:before {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 10;
+    }
+}
