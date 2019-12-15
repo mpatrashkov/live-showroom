@@ -1,10 +1,7 @@
 import Controller from "./Controller";
-import { BoxGeometry, MeshBasicMaterial, Mesh, Euler } from "three";
-import Time from "./utils/Time";
+import { BoxGeometry, MeshBasicMaterial } from "three";
 
-export default class CubeController extends Controller {
-    private rotationSpeed = 0.1;
-
+export default class FloorController extends Controller {
     start() {
         const geometry = new BoxGeometry( 1, 1, 1 );
         const material = new MeshBasicMaterial( { color: 0x00ff00 } );
@@ -13,10 +10,10 @@ export default class CubeController extends Controller {
     }
 
     update() {
-        
+
     }
 
     onClick() {
-        console.log(1);
+        console.log(2);
     }
 }
