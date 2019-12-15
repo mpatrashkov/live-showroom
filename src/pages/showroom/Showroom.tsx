@@ -4,7 +4,8 @@ import CubeController from '../../renderer/CubeController';
 import Renderer from '../../renderer/Renderer';
 import FloorController from '../../renderer/FloorController';
 import CameraController from '../../renderer/CameraController';
-import { MeshBasicMaterial } from 'three';
+import { MeshBasicMaterial, Vector3 } from 'three';
+import LightController from '../../renderer/LightController';
 
 export default class Showroom extends React.Component {
     mount: any;
@@ -13,8 +14,17 @@ export default class Showroom extends React.Component {
         const renderer = new Renderer(this.mount);
         renderer.start();
 
+        const master = renderer.addEntity("master");
+        const cameraController = master.addController(CameraController);
+        cameraController.offset = new Vector3(0, 0.5, 2);
+
+        const sun = renderer.addEntity("sun");
+        sun.addController(LightController);
+
         const cube = renderer.addEntity("cube");
-        cube.addController(CubeController);
+        cube.transform.position.x += 20;
+        const cubeController = cube.addController(CubeController);
+        cubeController.cameraController = cameraController;
 
         const floor = renderer.addEntity("floor");
         floor.addController(FloorController);
@@ -51,9 +61,6 @@ export default class Showroom extends React.Component {
         wall3.mesh.scale.y = 10;
         wall3.mesh.scale.x = 10;
         wall3.mesh.material = new MeshBasicMaterial( { color: 0xeeffee } );
-
-        const master = renderer.addEntity("master");
-        master.addController(CameraController);
     }
 
     render() {

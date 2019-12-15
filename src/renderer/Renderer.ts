@@ -24,6 +24,7 @@ export default class Renderer {
         window.onresize = () => {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.mainCamera.aspect = window.innerWidth / window.innerHeight;
+            this.mainCamera.updateProjectionMatrix();
         }
 
         this.mainCamera.position.z = 5;
