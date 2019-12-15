@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.d1b05096.chunk.css",
-    "main.js": "/static/js/main.f320b2f4.chunk.js",
-    "main.js.map": "/static/js/main.f320b2f4.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.792228b0.js",
-    "runtime-main.js.map": "/static/js/runtime-main.792228b0.js.map",
-    "static/js/2.3d0af7af.chunk.js": "/static/js/2.3d0af7af.chunk.js",
-    "static/js/2.3d0af7af.chunk.js.map": "/static/js/2.3d0af7af.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.2db2fed22e8e8d19ffd9045e6bf0c0a0.js": "/precache-manifest.2db2fed22e8e8d19ffd9045e6bf0c0a0.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.d1b05096.chunk.css.map": "/static/css/main.d1b05096.chunk.css.map",
-    "static/js/2.3d0af7af.chunk.js.LICENSE": "/static/js/2.3d0af7af.chunk.js.LICENSE",
-    "static/media/logo.svg": "/static/media/logo.5d5d9eef.svg"
+    "main.css": "/live-showroom/build/index.html/static/css/main.d1b05096.chunk.css",
+    "main.js": "/live-showroom/build/index.html/static/js/main.9c54cc32.chunk.js",
+    "main.js.map": "/live-showroom/build/index.html/static/js/main.9c54cc32.chunk.js.map",
+    "runtime-main.js": "/live-showroom/build/index.html/static/js/runtime-main.334992e2.js",
+    "runtime-main.js.map": "/live-showroom/build/index.html/static/js/runtime-main.334992e2.js.map",
+    "static/js/2.3d0af7af.chunk.js": "/live-showroom/build/index.html/static/js/2.3d0af7af.chunk.js",
+    "static/js/2.3d0af7af.chunk.js.map": "/live-showroom/build/index.html/static/js/2.3d0af7af.chunk.js.map",
+    "index.html": "/live-showroom/build/index.html/index.html",
+    "precache-manifest.c719a5d2ede1d249536e09b4679f1e7f.js": "/live-showroom/build/index.html/precache-manifest.c719a5d2ede1d249536e09b4679f1e7f.js",
+    "service-worker.js": "/live-showroom/build/index.html/service-worker.js",
+    "static/css/main.d1b05096.chunk.css.map": "/live-showroom/build/index.html/static/css/main.d1b05096.chunk.css.map",
+    "static/js/2.3d0af7af.chunk.js.LICENSE": "/live-showroom/build/index.html/static/js/2.3d0af7af.chunk.js.LICENSE",
+    "static/media/logo.svg": "/live-showroom/build/index.html/static/media/logo.5d5d9eef.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.792228b0.js",
+    "static/js/runtime-main.334992e2.js",
     "static/js/2.3d0af7af.chunk.js",
     "static/css/main.d1b05096.chunk.css",
-    "static/js/main.f320b2f4.chunk.js"
+    "static/js/main.9c54cc32.chunk.js"
   ]
 }
