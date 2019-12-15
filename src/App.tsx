@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+import { DatePicker } from 'antd';
 
 import * as three from "three";
 import Renderer from './renderer/Renderer';
