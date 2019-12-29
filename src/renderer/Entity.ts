@@ -19,4 +19,19 @@ export default class Entity {
 
         return controller;
     }
+
+    getController<T extends Controller>(type: new() => T): T | null {
+        for(let controller of this.controllers) {
+            if(controller instanceof type) {
+                return controller;
+            }
+        }
+        
+        return null;
+    }
+
+    destroy() {
+        this.controllers.forEach(controller => controller.destroy());
+        Controller.manager.removeEntity(this);
+    }
 }

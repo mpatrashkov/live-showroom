@@ -1,30 +1,31 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2, Color, Object3D } from "three";
-import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
+import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Vector2 } from "three";
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
 
-export default class Renderer {
+export default class GameManager {
     private scene: Scene;
-    private mainCamera: PerspectiveCamera;
+    public mainCamera: PerspectiveCamera;
+    private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
 
-    private entities: Entity[];
+    public entities: Entity[];
 
     constructor(mount: any) {
         this.entities = [];
 
         this.scene = new Scene();
         this.mainCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.activeCamera = this.mainCamera;
+
         this.renderer = new WebGLRenderer();
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
         window.onresize = () => {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.mainCamera.aspect = window.innerWidth / window.innerHeight;
-            this.mainCamera.updateProjectionMatrix();
+            this.activeCamera.aspect = this.getCameraAspectRatio();
+            this.activeCamera.updateProjectionMatrix();
         }
 
         this.mainCamera.position.z = 5;
@@ -33,6 +34,7 @@ export default class Renderer {
 
         Controller.scene = this.scene;
         Controller.renderer = this.renderer;
+        Controller.manager = this;
         Controller.mainCamera = this.mainCamera;
     }
 
@@ -44,7 +46,7 @@ export default class Renderer {
     start() {
         let prevTime: number | null = null;
 
-        this.clickEvents();
+        this.handleClicks();
 
         const animate = (now: DOMHighResTimeStamp) => {
             if(!prevTime) {
@@ -63,13 +65,13 @@ export default class Renderer {
             });
 
             requestAnimationFrame(animate);
-            this.renderer.render(this.scene, this.mainCamera);
+            this.renderer.render(this.scene, this.activeCamera);
         };
 
         requestAnimationFrame(animate);
     }
 
-    clickEvents() {
+    handleClicks() {
         Controller.renderer.domElement.addEventListener("click", (event) => {
             const raycaster = new Raycaster();
 
@@ -96,7 +98,21 @@ export default class Renderer {
         return entity;
     }
 
+    removeEntity(entity: Entity) {
+        this.scene.remove(entity.mesh);
+        this.entities = this.entities.filter(item => item !== entity);
+    }
+
     findEntityByName(name: string) : Entity | undefined {
         return this.entities.find(entity => entity.name === name);
+    }
+
+    changeActiveCamera(camera: PerspectiveCamera) {
+        this.activeCamera = camera;
+        this.activeCamera.aspect = this.getCameraAspectRatio();
+    }
+
+    private getCameraAspectRatio() {
+        return window.innerWidth / window.innerHeight;
     }
 }

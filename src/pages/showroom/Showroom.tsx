@@ -1,17 +1,25 @@
 import React from 'react';
 import "./showroom.scss"
 import CubeController from '../../renderer/CubeController';
-import Renderer from '../../renderer/Renderer';
+import GameManager from '../../renderer/Renderer';
 import FloorController from '../../renderer/FloorController';
 import CameraController from '../../renderer/CameraController';
 import { MeshBasicMaterial, Vector3 } from 'three';
 import LightController from '../../renderer/LightController';
+import DevInspector from '../../components/header/DevInspector';
 
-export default class Showroom extends React.Component {
+interface ShowroomState {
+    renderer: GameManager | null;
+}
+
+export default class Showroom extends React.Component<{}, ShowroomState> {
     mount: any;
+    state = {
+        renderer: null
+    };
 
     componentDidMount() {
-        const renderer = new Renderer(this.mount);
+        const renderer = new GameManager(this.mount);
         renderer.start();
 
         const master = renderer.addEntity("master");
@@ -61,11 +69,19 @@ export default class Showroom extends React.Component {
         wall3.mesh.scale.y = 10;
         wall3.mesh.scale.x = 10;
         wall3.mesh.material = new MeshBasicMaterial( { color: 0xeeffee } );
+
+        this.setState({
+            renderer: renderer
+        });
     }
 
     render() {
         return (
-            <div className="page showroom" ref={el => this.mount = el}></div>
+            <div className="page showroom">
+                <div ref={el => this.mount = el}></div>
+
+                <DevInspector renderer={this.state.renderer} />
+            </div>
         )
     }
 }

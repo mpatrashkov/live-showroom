@@ -1,0 +1,19 @@
+.inspector-tree {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    width: 250px;
+
+    background-color: white;
+    padding: 4px;
+}
+
+.inspector-tree-node {
+    cursor: pointer;
+}
+
+.inspector-tree-node.selected {
+    cursor: pointer;
+    background: lightblue;
+}
