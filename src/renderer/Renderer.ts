@@ -1,15 +1,21 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Vector2 } from "three";
+import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2, Color, Object3D, Quaternion } from "three";
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
+import DragHandler from "./utils/DragHandler";
 
 export default class GameManager {
     private scene: Scene;
     public mainCamera: PerspectiveCamera;
     private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
+    private dragHandler: DragHandler;
 
     public entities: Entity[];
+
+    public q = new Quaternion()
 
     constructor(mount: any) {
         this.entities = [];
@@ -19,6 +25,7 @@ export default class GameManager {
         this.activeCamera = this.mainCamera;
 
         this.renderer = new WebGLRenderer();
+        this.dragHandler = new DragHandler()
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
@@ -47,6 +54,7 @@ export default class GameManager {
         let prevTime: number | null = null;
 
         this.handleClicks();
+        this.dragHandler.setup(this, this.mainCamera)
 
         const animate = (now: DOMHighResTimeStamp) => {
             if(!prevTime) {
@@ -84,7 +92,7 @@ export default class GameManager {
 
             for(let intersect of intersects) {
                 const hitEntity = this.findEntityByName(intersect.object.name);
-                hitEntity?.controllers.forEach(controller => controller.onClick())
+                hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
                 break;
             }
         }, true);
@@ -114,5 +122,9 @@ export default class GameManager {
 
     private getCameraAspectRatio() {
         return window.innerWidth / window.innerHeight;
+    }
+    
+    getDOMElement() {
+        return this.renderer.domElement;
     }
 }
