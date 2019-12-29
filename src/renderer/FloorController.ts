@@ -14,7 +14,7 @@ export default class FloorController extends Controller {
         texture.wrapS = RepeatWrapping;
         texture.wrapT = RepeatWrapping;
 
-        const geometry = new PlaneGeometry(11,11);
+        const geometry = new PlaneGeometry(30,30);
         const material = new MeshBasicMaterial({
             map: texture,
         });
