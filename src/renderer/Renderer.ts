@@ -7,7 +7,7 @@ import Entity from "./Entity";
 import DragHandler from "./utils/DragHandler";
 
 export default class GameManager {
-    private scene: Scene;
+    public scene: Scene;
     public mainCamera: PerspectiveCamera;
     private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
@@ -30,7 +30,7 @@ export default class GameManager {
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
         window.onresize = () => {
-            this.renderer.setSize(mount.innerWidth, mount.innerHeight);
+            this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
             this.activeCamera.aspect = this.getCameraAspectRatio();
             this.activeCamera.updateProjectionMatrix();
         }
