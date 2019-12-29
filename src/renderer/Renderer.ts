@@ -21,16 +21,16 @@ export default class GameManager {
         this.entities = [];
 
         this.scene = new Scene();
-        this.mainCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.mainCamera = new PerspectiveCamera(75, this.getCameraAspectRatio(), 0.1, 1000);
         this.activeCamera = this.mainCamera;
 
         this.renderer = new WebGLRenderer();
-        this.dragHandler = new DragHandler()
+        this.dragHandler = new DragHandler();
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
         window.onresize = () => {
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setSize(mount.innerWidth, mount.innerHeight);
             this.activeCamera.aspect = this.getCameraAspectRatio();
             this.activeCamera.updateProjectionMatrix();
         }
