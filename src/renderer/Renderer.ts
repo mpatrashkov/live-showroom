@@ -1,16 +1,20 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2, Color, Object3D } from "three";
+import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2, Color, Object3D, Quaternion } from "three";
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
+import DragHandler from "./utils/DragHandler";
 
 export default class Renderer {
     private scene: Scene;
     private mainCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
+    private dragHandler: DragHandler;
 
     private entities: Entity[];
+
+    public q = new Quaternion()
 
     constructor(mount: any) {
         this.entities = [];
@@ -18,6 +22,7 @@ export default class Renderer {
         this.scene = new Scene();
         this.mainCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new WebGLRenderer();
+        this.dragHandler = new DragHandler()
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
@@ -45,6 +50,7 @@ export default class Renderer {
         let prevTime: number | null = null;
 
         this.clickEvents();
+        this.dragHandler.setup(this, this.mainCamera)
 
         const animate = (now: DOMHighResTimeStamp) => {
             if(!prevTime) {
@@ -82,7 +88,7 @@ export default class Renderer {
 
             for(let intersect of intersects) {
                 const hitEntity = this.findEntityByName(intersect.object.name);
-                hitEntity?.controllers.forEach(controller => controller.onClick())
+                hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
                 break;
             }
         }, true);
@@ -98,5 +104,9 @@ export default class Renderer {
 
     findEntityByName(name: string) : Entity | undefined {
         return this.entities.find(entity => entity.name === name);
+    }
+
+    getDOMElement() {
+        return this.renderer.domElement;
     }
 }

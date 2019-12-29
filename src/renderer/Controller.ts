@@ -1,4 +1,4 @@
-import { Scene, Mesh, WebGLRenderer, PerspectiveCamera, Raycaster, Vector2 } from "three";
+import { Scene, Mesh, WebGLRenderer, PerspectiveCamera, Raycaster, Vector2, Vector3 } from "three";
 import Entity from "./Entity";
 import Transform from "./Transform";
 
@@ -21,7 +21,7 @@ abstract class Controller {
 
     update() { }
 
-    onClick() { }
+    onClick(point?: Vector3) { }
 }
 
 export default Controller;

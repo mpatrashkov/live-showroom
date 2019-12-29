@@ -22,13 +22,15 @@ export default class Showroom extends React.Component {
         sun.addController(LightController);
 
         const cube = renderer.addEntity("cube");
-        cube.transform.position.x += 20;
+        //cube.transform.position.x += 20;
         const cubeController = cube.addController(CubeController);
         cubeController.cameraController = cameraController;
 
         const floor = renderer.addEntity("floor");
-        floor.addController(FloorController);
+        const floorController = floor.addController(FloorController);
         floor.transform.position.y = -0.5;
+        floorController.cameraController = cameraController;
+    
         
         const wall = renderer.addEntity("wall");
         wall.addController(CubeController);
