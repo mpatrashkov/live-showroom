@@ -32,7 +32,7 @@ export default class GameManager {
 
         window.onresize = () => {
             this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
-            this.activeCamera.aspect = this.getCameraAspectRatio(); 
+            this.activeCamera.aspect = this.getCameraAspectRatio();
             this.activeCamera.updateProjectionMatrix();
         }   
 

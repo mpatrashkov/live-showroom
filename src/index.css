@@ -21,6 +21,7 @@ body {
 .showroom {
     margin: 0;
     padding: 0;
+    height: 93vh;
     max-height: 93vh;
     height: 93vh;
     position: relative;
