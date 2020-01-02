@@ -4,9 +4,13 @@ import CubeController from '../../renderer/CubeController';
 import GameManager from '../../renderer/Renderer';
 import FloorController from '../../renderer/FloorController';
 import CameraController from '../../renderer/CameraController';
-import { MeshBasicMaterial, Vector3 } from 'three';
+import { MeshBasicMaterial, Vector3, Mesh, Color, DirectionalLight, HemisphereLight, PointLight } from 'three';
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import LightController from '../../renderer/LightController';
 import DevInspector from '../../components/header/DevInspector';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import ModelController from '../../renderer/ModelController';
+import OrbitalController from '../../renderer/OrbitableController';
 
 interface ShowroomState {
     renderer: GameManager | null;
@@ -30,11 +34,14 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         sun.addController(LightController);
 
         const cube = renderer.addEntity("cube");
+        cube.addController(OrbitalController).cameraController = cameraController;
+        cube.addController(ModelController).load("z9a.obj", "z9a.mtl")
         //cube.transform.position.x += 20;
-        const cubeController = cube.addController(CubeController);
-        cubeController.cameraController = cameraController;
+        // const cubeController = cube.addController(CubeController);
+        // cubeController.cameraController = cameraController;
 
         const floor = renderer.addEntity("floor");
+        floor.mesh.receiveShadow = true;
         const floorController = floor.addController(FloorController);
         floor.transform.position.y = -0.5;
         floorController.cameraController = cameraController;
@@ -71,6 +78,18 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         wall3.mesh.scale.y = 10;
         wall3.mesh.scale.x = 10;
         wall3.mesh.material = new MeshBasicMaterial( { color: 0xeeffee } );
+
+        const color = 0xFFFFFF;
+        const intensity = 1;
+        const light1 = new DirectionalLight(color, intensity);
+        light1.position.set(2, 100, 2);
+        light1.target.position.set(-5, 0, 0);
+        renderer.scene.add(light1);
+        renderer.scene.add(light1.target);
+
+        var light = new PointLight( 0xffbb73, 1, 100 );
+        light.position.set( 10, 10, 2 );
+        renderer.scene.add( light );
 
         this.setState({
             renderer: renderer

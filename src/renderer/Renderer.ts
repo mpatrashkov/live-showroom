@@ -7,7 +7,7 @@ import Entity from "./Entity";
 import DragHandler from "./utils/DragHandler";
 
 export default class GameManager {
-    private scene: Scene;
+    public scene: Scene;
     public mainCamera: PerspectiveCamera;
     private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
@@ -25,15 +25,16 @@ export default class GameManager {
         this.activeCamera = this.mainCamera;
 
         this.renderer = new WebGLRenderer();
+        this.renderer.shadowMap.enabled = true;
         this.dragHandler = new DragHandler();
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
         window.onresize = () => {
-            this.renderer.setSize(mount.innerWidth, mount.innerHeight);
-            this.activeCamera.aspect = this.getCameraAspectRatio();
+            this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
+            this.activeCamera.aspect = this.getCameraAspectRatio(); 
             this.activeCamera.updateProjectionMatrix();
-        }
+        }   
 
         this.mainCamera.position.z = 5;
 
@@ -90,9 +91,18 @@ export default class GameManager {
             raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
             const intersects = raycaster.intersectObjects(Controller.scene.children, true);
 
-            for(let intersect of intersects) {
-                const hitEntity = this.findEntityByName(intersect.object.name);
-                hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
+            for(let intersect of intersects) {   
+                const clickEvent = (object: Object3D) => {
+                    const hitEntity = this.findEntityByName(object.name);
+                    hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
+                    console.log(hitEntity);
+                    if(object.parent) {
+                        clickEvent(object.parent);
+                    }
+                }
+
+                clickEvent(intersect.object);
+
                 break;
             }
         }, true);
