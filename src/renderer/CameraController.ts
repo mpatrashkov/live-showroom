@@ -28,6 +28,7 @@ export default class CameraController extends Controller {
     start() {
         this.orbitControls = new OrbitControls(Controller.mainCamera, Controller.renderer.domElement);
         this.orbitControls.enableRotate = false
+        Controller.mainCamera.position.y = 5
     }
 
     update() {
@@ -104,7 +105,7 @@ export default class CameraController extends Controller {
             this.orbitControls.autoRotate = false;
             this.isLocked = false
         }
-        this.target = target.clone().add(new Vector3(0, 1.5, 2))
+        this.target = target.clone().add(new Vector3(0, 5, 2))
         this.progress = 0;
         this.startingPosition = Controller.mainCamera.position.clone();
         this.rotation = Controller.mainCamera.rotation.clone();
