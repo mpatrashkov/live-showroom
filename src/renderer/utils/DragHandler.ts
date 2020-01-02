@@ -37,7 +37,6 @@ export default class DragHandler {
                 const q = camera.quaternion.multiplyQuaternions(deltaRotationQuaternion, camera.quaternion);
                 Quaternion.slerp(Controller.mainCamera.quaternion, q, qm, 1)
                 Controller.mainCamera.quaternion.set(qm.x, qm.y,qm.z,qm.w)
-                console.log(Controller.mainCamera.quaternion)
             }
 
             this.previousMousePosition = {
