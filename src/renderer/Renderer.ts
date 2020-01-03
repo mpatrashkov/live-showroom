@@ -95,7 +95,6 @@ export default class GameManager {
                 const clickEvent = (object: Object3D) => {
                     const hitEntity = this.findEntityByName(object.name);
                     hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
-                    console.log(hitEntity);
                     if(object.parent) {
                         clickEvent(object.parent);
                     }

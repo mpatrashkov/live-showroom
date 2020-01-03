@@ -40,4 +40,8 @@ export default class ModelController extends Controller {
             })  
         })
     }
+
+    clear() {
+        this.mesh.children = [];
+    }
 }
