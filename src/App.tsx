@@ -10,6 +10,7 @@ import {
 import Home from './pages/home/Home';
 import Header from './components/header/Header';
 import Showroom from './pages/showroom/Showroom';
+import AddModel from './pages/add-models/AddModel';
 
 const App: React.FC = () => {
     return (
@@ -22,6 +23,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/showroom" exact>
                         <Showroom />
+                    </Route>
+                    <Route path="/add/model" exact>
+                        <AddModel />
                     </Route>
                 </Switch>
             </div>
