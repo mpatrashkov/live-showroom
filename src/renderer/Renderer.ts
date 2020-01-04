@@ -5,13 +5,15 @@ import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
 import DragHandler from "./utils/DragHandler";
+import Drag from "./utils/Drag";
 
 export default class GameManager {
     public scene: Scene;
     public mainCamera: PerspectiveCamera;
     private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
-    private dragHandler: DragHandler;
+
+    // private dragHandler: DragHandler;
 
     public entities: Entity[];
 
@@ -26,7 +28,7 @@ export default class GameManager {
 
         this.renderer = new WebGLRenderer();
         this.renderer.shadowMap.enabled = true;
-        this.dragHandler = new DragHandler();
+        // this.dragHandler = new DragHandler();
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
@@ -55,7 +57,14 @@ export default class GameManager {
         let prevTime: number | null = null;
 
         this.handleClicks();
-        this.dragHandler.setup(this, this.mainCamera)
+        Drag.setup(this);
+        Drag.onDrag((deltaDrag) => {
+            this.entities.forEach(entity => {
+                entity.controllers.forEach(controller => {
+                    controller.onMouseDrag(deltaDrag)
+                })
+            })
+        })
 
         const animate = (now: DOMHighResTimeStamp) => {
             if(!prevTime) {
@@ -69,6 +78,7 @@ export default class GameManager {
 
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
+                    controller.startUpdate();
                     controller.update();
                 });
             });
@@ -105,6 +115,10 @@ export default class GameManager {
                 break;
             }
         }, true);
+    }
+
+    handleDrag() {
+
     }
 
     addEntity(name: string): Entity {
