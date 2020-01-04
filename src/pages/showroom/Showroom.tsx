@@ -54,7 +54,12 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
         const cube = renderer.addEntity("cube");
         cube.addController(OrbitalController).cameraController = cameraController;
-        cube.addController(ModelController).load("z9a.obj", "z9a.mtl")
+        let cubeModelController = cube.addController(ModelController);
+        cubeModelController.load("z9a.obj", "z9a.mtl")
+        setTimeout(() => {
+            cubeModelController.clear()
+            cubeModelController.load("z9b.obj", "z9b.mtl")
+        }, 10000)
         //cube.transform.position.x += 20;
         // const cubeController = cube.addController(CubeController);
         // cubeController.cameraController = cameraController;
