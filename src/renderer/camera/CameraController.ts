@@ -3,10 +3,19 @@ import Entity from "../Entity";
 import CameraOrbitController from "./CameraOrbitController";
 import { Matrix4, Quaternion, Vector3 } from "three";
 import Time from "../utils/Time";
+import CameraMovementController from "./CameraMovementController";
 
 export default class CameraController extends Controller {
     public orbitOffset = new Vector3(0, 1, 2);
-    private state = false;
+
+    private cameraMovementController: CameraMovementController | null = null;
+    private cameraOrbitController: CameraOrbitController | null = null;
+
+    start() {
+        this.cameraMovementController = this.entity.addController(CameraMovementController)
+        this.cameraOrbitController = this.entity.addController(CameraOrbitController)
+        this.cameraOrbitController.enabled = false;
+    }
 
     private prepareCameraForOrbiting(target: Entity) {
         return new Promise((resolve, reject) => {
@@ -39,9 +48,21 @@ export default class CameraController extends Controller {
     }
 
     public setTarget(target: Entity) {
-        this.state = true;
         this.prepareCameraForOrbiting(target).then(() => {
-            this.entity.addController(CameraOrbitController).target = target;
+            if(this.cameraOrbitController) {
+                this.cameraOrbitController.enabled = true;
+                this.cameraOrbitController.target = target;
+            }
         });
+    }
+
+    public setPosition(point: Vector3) {
+        if(this.cameraOrbitController) {
+            this.cameraOrbitController.enabled = false;
+        }
+
+        if(this.cameraMovementController) {
+            this.cameraMovementController.setPosition(point);
+        }
     }
 }

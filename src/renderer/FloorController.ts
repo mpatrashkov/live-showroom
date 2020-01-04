@@ -1,9 +1,15 @@
 import Controller from "./Controller";
-import { BoxGeometry, MeshBasicMaterial, PlaneGeometry, Euler, TextureLoader, MeshLambertMaterial, Vector2, RepeatWrapping, Vector3 } from "three";
-import CameraController from "./CameraController";
+import { BoxGeometry, MeshBasicMaterial, PlaneGeometry, Euler, TextureLoader, MeshLambertMaterial, Vector2, RepeatWrapping, Vector3, Raycaster, Quaternion } from "three";
+import CameraController from "./camera/CameraController";
+import Input from "./utils/Input";
+import Entity from "./Entity";
+import Raycast from "./utils/Raycast";
+import CircleController from "./CircleController";
+import MathHelpers from "./utils/MathHelpers";
 
 export default class FloorController extends Controller {
     public cameraController: CameraController | null = null;
+    private movementCircle: Entity | null = null;
 
     start() {
         const textureDensity = 3;
@@ -21,15 +27,26 @@ export default class FloorController extends Controller {
         this.mesh.geometry = geometry;
         this.mesh.material = material;
         this.transform.eulerRotation = new Euler(-Math.PI/2,0,0)
+
+        this.movementCircle = this.entity.createChild("movement_circle");
+        this.movementCircle.addController(CircleController);
+        this.movementCircle.transform.eulerRotation = new Euler(MathHelpers.toRad(-90), 0, 0);
     }
 
     update() {
-
+        const hit = Raycast.fromCamera(Input.mousePosition, [this.entity]);
+        if(hit) {
+            this.movementCircle?.transform.position.set(
+                hit.point.x,
+                // Give it a bit of elevation so that it doesn't bug with floor
+                hit.point.y + 0.001,
+                hit.point.z
+            )
+        }
     }
 
     onClick(point: Vector3) {
         if(this.cameraController) {
-            //console.log(point)
             this.cameraController.setPosition(point);
         }
     }

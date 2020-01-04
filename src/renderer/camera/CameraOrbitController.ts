@@ -16,20 +16,11 @@ export default class CameraOrbitController extends Controller {
     public startAutoRotateDuration = 3000;
     private startAutoRotateTimeout: NodeJS.Timeout | null = null;
 
-    private startingRotation = {
-        theta: 0,
-        phi: 0
-    }
 
     start() {
         const pos = Controller.mainCamera.position;
         const sph = new Spherical();
         sph.setFromVector3(pos);
-
-        this.startingRotation = {
-            theta: sph.theta,
-            phi: sph.phi
-        }
     }
 
     update() {

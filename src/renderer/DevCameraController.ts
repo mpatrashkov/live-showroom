@@ -14,7 +14,6 @@ export default class DevCameraController extends Controller {
     setTarget(entity: Entity) {
         this.transform.position = entity.transform.position.clone().add(this.offset);
         this.camera.position.set(this.transform.position.x, this.transform.position.y, this.transform.position.z);
-        console.log(this.transform.position);
         this.camera.lookAt(entity.transform.position);
     }
 

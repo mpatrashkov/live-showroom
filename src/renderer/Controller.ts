@@ -15,7 +15,8 @@ abstract class Controller {
     public static renderer: WebGLRenderer;
     public static mainCamera: PerspectiveCamera;
     public static manager: GameManager;
-
+    
+    public enabled: boolean;
     public entity: Entity;
     public transform: Transform;
     public mesh: Mesh;
@@ -23,6 +24,7 @@ abstract class Controller {
     private updateListeners: UpdateCallback[] = [];
 
     constructor(entity: Entity) {
+        this.enabled = true;
         this.entity = entity;
         this.transform = entity.transform;
         this.mesh = entity.mesh;

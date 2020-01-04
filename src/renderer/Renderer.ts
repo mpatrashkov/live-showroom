@@ -6,6 +6,7 @@ import Time from "./utils/Time";
 import Entity from "./Entity";
 import DragHandler from "./utils/DragHandler";
 import Drag from "./utils/Drag";
+import Input from "./utils/Input";
 
 export default class GameManager {
     public scene: Scene;
@@ -57,11 +58,14 @@ export default class GameManager {
         let prevTime: number | null = null;
 
         this.handleClicks();
+        Input.setup(this);
         Drag.setup(this);
         Drag.onDrag((deltaDrag) => {
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
-                    controller.onMouseDrag(deltaDrag)
+                    if(controller.enabled) {
+                        controller.onMouseDrag(deltaDrag)
+                    }
                 })
             })
         })
@@ -78,8 +82,9 @@ export default class GameManager {
 
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
-                    controller.startUpdate();
-                    controller.update();
+                    if(controller.enabled) {
+                        controller.startUpdate();
+                    }
                 });
             });
 
@@ -100,7 +105,6 @@ export default class GameManager {
 
             raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
             const intersects = raycaster.intersectObjects(Controller.scene.children, true);
-
             for(let intersect of intersects) {   
                 const clickEvent = (object: Object3D) => {
                     const hitEntity = this.findEntityByName(object.name);
@@ -111,8 +115,6 @@ export default class GameManager {
                 }
 
                 clickEvent(intersect.object);
-
-                break;
             }
         }, true);
     }

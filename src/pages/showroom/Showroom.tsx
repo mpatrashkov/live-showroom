@@ -7,12 +7,11 @@ import CameraController from '../../renderer/camera/CameraController';
 
 import { MeshBasicMaterial, Vector3, DirectionalLight, PointLight, CubeTextureLoader, RepeatWrapping } from 'three';
 import ModelController from '../../renderer/ModelController';
-import OrbitalController from '../../renderer/OrbitableController';
+import OrbitableController from '../../renderer/OrbitableController';
 import LightController from '../../renderer/LightController';
 import DevInspector from '../../components/header/DevInspector';
 import { TextureLoader } from 'three'
 import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader"
-import EventSystem, { EventType } from '../../renderer/utils/EventSystem';
 
 interface ShowroomState {
     renderer: GameManager | null;
@@ -54,7 +53,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         sun.addController(LightController);
 
         const cube = renderer.addEntity("cube");
-        cube.addController(OrbitalController).cameraController = cameraController;
+        cube.addController(OrbitableController).cameraController = cameraController;
         cube.addController(ModelController).load("z9a.obj", "z9a.mtl")
         //cube.transform.position.x += 20;
         // const cubeController = cube.addController(CubeController);
@@ -64,7 +63,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         floor.mesh.receiveShadow = true;
         const floorController = floor.addController(FloorController);
         floor.transform.position.y = -0.5;
-        // floorController.cameraController = cameraController;
+        floorController.cameraController = cameraController;
 
 
         const wall = renderer.addEntity("wall");
