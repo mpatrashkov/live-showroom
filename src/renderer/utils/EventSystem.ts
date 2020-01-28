@@ -5,7 +5,7 @@ export enum EventType {
 }
 
 type EventDataType = {
-    [EventType.OrbitableClicked]: never
+    [EventType.OrbitableClicked]: string
 }
 
 export default class EventSystem {

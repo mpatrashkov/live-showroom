@@ -2,7 +2,9 @@ import React from 'react';
 import "./addModel.scss";
 
 interface AddModelState {
-    file: any;
+    file: any,
+    type: string,
+    image: any
 }
 
 export default class AddModel extends React.Component<{}, AddModelState> {
@@ -10,21 +12,49 @@ export default class AddModel extends React.Component<{}, AddModelState> {
         super(props)
 
         this.state = {
-            file: null
+            file: null,
+            type: '',
+            image: null
         }
     }
 
-    onChangeHandler = (e:any) => {
+    onChangeFileHandler = (e:any) => {
+        console.log(e.target.files[0].name)
         this.setState({
             file: e.target.files[0]
         })
+    }
+
+    onChangeImageHandler = (e:any) => {
+        this.setState({
+            image: e.target.files[0]
+        })
+    }
+
+    onChangeTypeHandler = (e:any) => {
+        this.setState({
+            type: e.target.value
+        })
+    }
+
+    onSubmitImageHandler = (e:any) => {
+        e.preventDefault()
+        let data = new FormData()
+        data.append('file', this.state.image)
+        fetch(`http://localhost:9999/model/upload/image/${this.state.file.name}`, {
+            method: 'POST',
+            body: data
+        }).then((res) => { 
+            console.log(res)
+         })
     }
 
     onSubmitHandler = (e:any) => {
         e.preventDefault()
         let data = new FormData()
         data.append('file', this.state.file)
-        fetch('http://localhost:9999/upload', {
+        data.append('type', this.state.type)
+        fetch(`http://localhost:9999/model/upload`, {
             method: 'POST',
             body: data
         }).then((res) => { 
@@ -36,7 +66,13 @@ export default class AddModel extends React.Component<{}, AddModelState> {
         return (
             <div>
                 <form onSubmit={this.onSubmitHandler}>
-                    <input type="file" name="file" onChange={this.onChangeHandler} /> 
+                    <input type="file" name="file" onChange={this.onChangeFileHandler} />
+                    <input type="text" name="type" onChange={this.onChangeTypeHandler} />
+                    <input type="submit" />
+                </form>
+
+                <form onSubmit={this.onSubmitImageHandler}>
+                    <input type="file" name="image" onChange={this.onChangeImageHandler} />
                     <input type="submit" />
                 </form>
             </div>
