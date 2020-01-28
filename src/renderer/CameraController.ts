@@ -9,7 +9,7 @@ enum CameraState {
 }
 
 export default class CameraController extends Controller {
-    public offset = new Vector3();
+    public offset = new Vector3(); 
 
     private orbitControls: OrbitControls | null = null;
     private target = new Vector3();

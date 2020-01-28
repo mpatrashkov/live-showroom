@@ -68,7 +68,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         const master = renderer.addEntity("master");
         const cameraController = master.addController(CameraController);
 
-        cameraController.offset = new Vector3(0, 5, 7);
+        cameraController.orbitOffset = new Vector3(0, 5, 7);
 
         const sun = renderer.addEntity("sun");
         sun.addController(LightController);
@@ -86,7 +86,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
         this.state.defaultModels.forEach((m) => {
             const cube = renderer.addEntity(m.name);
-            cube.addController(OrbitalController).cameraController = cameraController;
+            cube.addController(OrbitableController).cameraController = cameraController;
             let cubeModelController = cube.addController(ModelController);
             cubeModelController.load(m.path, m.material)
             if (m.type == "Sofa") {

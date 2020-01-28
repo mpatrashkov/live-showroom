@@ -20,6 +20,7 @@ export default class CameraController extends Controller {
         this.cameraOrbitController = this.entity.addController(CameraOrbitController)
         this.cameraRotationController = this.entity.addController(CameraRotationController)
         this.cameraOrbitController.enabled = false;
+        Controller.mainCamera.position.y = 5;
     }
 
     private prepareCameraForOrbiting(target: Entity) {
