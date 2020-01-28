@@ -6,6 +6,8 @@ import Entity from "./Entity";
 import Raycast from "./utils/Raycast";
 import CircleController from "./CircleController";
 import MathHelpers from "./utils/MathHelpers";
+import DragHandler from "./utils/DragHandler";
+import Drag from "./utils/Drag";
 
 export default class FloorController extends Controller {
     public cameraController: CameraController | null = null;
@@ -47,6 +49,13 @@ export default class FloorController extends Controller {
 
     onMouseDown(point: Vector3) {
         if(this.cameraController) {
+            Drag.startDragCheck();
+            // this.cameraController.setPosition(point);
+        }
+    }
+
+    onMouseUp(point: Vector3) {
+        if(this.cameraController && !Drag.checkDrag()) {
             this.cameraController.setPosition(point);
         }
     }
