@@ -9,18 +9,18 @@ export default class ModelController extends Controller {
     load(model: string, material: string) {
         const objLoader = new OBJLoader();
         const mtlLoader = new MTLLoader();
-        mtlLoader.setResourcePath(assetsPath)
-        mtlLoader.setPath(assetsPath);
+        // mtlLoader.setResourcePath(assetsPath)
+        // mtlLoader.setPath(assetsPath)
         mtlLoader.load(material, materials => {
             materials.preload();
 
             objLoader.setMaterials(materials);
 
-            objLoader.setPath(assetsPath);
             objLoader.load(model, object => {
-                object.scale.x = 0.01;
-                object.scale.y = 0.01;
-                object.scale.z = 0.01;
+                object.scale.x = 0.08;
+                object.scale.y = 0.08;
+                object.scale.z = 0.08;
+                object.position.y = -0.5
 
                 object.castShadow = true;
                 object.receiveShadow = true;
