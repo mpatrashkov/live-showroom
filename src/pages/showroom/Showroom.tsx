@@ -3,11 +3,11 @@ import "./showroom.scss"
 import CubeController from '../../renderer/CubeController';
 import GameManager from '../../renderer/Renderer';
 import FloorController from '../../renderer/FloorController';
-import CameraController from '../../renderer/CameraController';
+import CameraController from '../../renderer/camera/CameraController';
 
 import { MeshBasicMaterial, Vector3, DirectionalLight, PointLight, CubeTextureLoader, RepeatWrapping } from 'three';
 import ModelController from '../../renderer/ModelController';
-import OrbitalController from '../../renderer/OrbitableController';
+import OrbitableController from '../../renderer/OrbitableController';
 import LightController from '../../renderer/LightController';
 import DevInspector from '../../components/header/DevInspector';
 import { TextureLoader } from 'three'
@@ -47,19 +47,14 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
         const master = renderer.addEntity("master");
         const cameraController = master.addController(CameraController);
-        cameraController.offset = new Vector3(0, 1, 2);
+        // cameraController.offset = new Vector3(0, 1, 2);
 
         const sun = renderer.addEntity("sun");
         sun.addController(LightController);
 
         const cube = renderer.addEntity("cube");
-        cube.addController(OrbitalController).cameraController = cameraController;
-        let cubeModelController = cube.addController(ModelController);
-        cubeModelController.load("z9a.obj", "z9a.mtl")
-        setTimeout(() => {
-            cubeModelController.clear()
-            cubeModelController.load("z9b.obj", "z9b.mtl")
-        }, 10000)
+        cube.addController(OrbitableController).cameraController = cameraController;
+        cube.addController(ModelController).load("z9a.obj", "z9a.mtl")
         //cube.transform.position.x += 20;
         // const cubeController = cube.addController(CubeController);
         // cubeController.cameraController = cameraController;

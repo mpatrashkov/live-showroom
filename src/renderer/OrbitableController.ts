@@ -1,12 +1,12 @@
 import Controller from "./Controller";
-import CameraController from "./CameraController";
+import CameraController from "./camera/CameraController";
 
-export default class OrbitalController extends Controller {
+export default class OrbitableController extends Controller {
     public cameraController: CameraController | null = null;
 
     onClick() {
         if(this.cameraController) {
-            this.cameraController.setTarget(this.transform.position);
+            this.cameraController.setTarget(this.entity);
         }
     }
 }
