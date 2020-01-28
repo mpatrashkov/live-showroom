@@ -5,14 +5,19 @@ import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
 import DragHandler from "./utils/DragHandler";
+
 import EventSystem, { EventType } from "./utils/EventSystem";
+
+import Drag from "./utils/Drag";
+import Input from "./utils/Input";
 
 export default class GameManager {
     public scene: Scene;
     public mainCamera: PerspectiveCamera;
     private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
-    private dragHandler: DragHandler;
+
+    // private dragHandler: DragHandler;
 
     public entities: Entity[];
 
@@ -27,7 +32,7 @@ export default class GameManager {
 
         this.renderer = new WebGLRenderer();
         this.renderer.shadowMap.enabled = true;
-        this.dragHandler = new DragHandler();
+        // this.dragHandler = new DragHandler();
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
@@ -56,7 +61,17 @@ export default class GameManager {
         let prevTime: number | null = null;
 
         this.handleClicks();
-        this.dragHandler.setup(this, this.mainCamera)
+        Input.setup(this);
+        Drag.setup(this);
+        Drag.onDrag((deltaDrag) => {
+            this.entities.forEach(entity => {
+                entity.controllers.forEach(controller => {
+                    if(controller.enabled) {
+                        controller.onMouseDrag(deltaDrag)
+                    }
+                })
+            })
+        })
 
         const animate = (now: DOMHighResTimeStamp) => {
             if (!prevTime) {
@@ -70,7 +85,9 @@ export default class GameManager {
 
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
-                    controller.update();
+                    if(controller.enabled) {
+                        controller.startUpdate();
+                    }
                 });
             });
 
@@ -83,32 +100,41 @@ export default class GameManager {
 
     handleClicks() {
         Controller.renderer.domElement.addEventListener("click", (event) => {
-            const raycaster = new Raycaster();
-
-            const mouse = new Vector2();
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
-            const intersects = raycaster.intersectObjects(Controller.scene.children, true);
-
-            for (let intersect of intersects) {
-                const clickEvent = (object: Object3D) => {
-                    const hitEntity = this.findEntityByName(object.name);
-                    hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
-                    if (object.parent) {
-                        if (hitEntity) {
-                            EventSystem.fire(EventType.OrbitableClicked, hitEntity.name)
-                        }
-                        clickEvent(object.parent);
-                    }
-                }
-
-                clickEvent(intersect.object);
-
-                break;
-            }
+            this.handleMouseAction(event, controller => controller.onClick);
         }, true);
+
+        Controller.renderer.domElement.addEventListener("mousedown", (event) => {
+            this.handleMouseAction(event, controller => controller.onMouseDown);
+        }, true);
+    }
+
+    handleMouseAction(event: MouseEvent, callbackFunction: (controller: Controller) => Function) {
+        const raycaster = new Raycaster();
+
+        const mouse = new Vector2();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
+        const intersects = raycaster.intersectObjects(Controller.scene.children, true);
+        for(let intersect of intersects) {   
+            const clickEvent = (object: Object3D) => {
+                const hitEntity = this.findEntityByName(object.name);
+                hitEntity?.controllers.forEach(controller => callbackFunction(controller).call(controller, intersect.point))
+                if(object.parent) {
+                    if (hitEntity) {
+                        EventSystem.fire(EventType.OrbitableClicked, hitEntity.name)
+                    }
+                    clickEvent(object.parent);
+                }
+            }
+
+            clickEvent(intersect.object);
+        }
+    }
+
+    handleDrag() {
+
     }
 
     addEntity(name: string): Entity {

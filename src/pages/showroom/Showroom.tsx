@@ -3,11 +3,11 @@ import "./showroom.scss"
 import CubeController from '../../renderer/CubeController';
 import GameManager from '../../renderer/Renderer';
 import FloorController from '../../renderer/FloorController';
-import CameraController from '../../renderer/CameraController';
+import CameraController from '../../renderer/camera/CameraController';
 
 import { MeshBasicMaterial, Vector3, DirectionalLight, PointLight, CubeTextureLoader, RepeatWrapping, WebGLRenderer, Scene, PerspectiveCamera, BoxGeometry, Mesh } from 'three';
 import ModelController from '../../renderer/ModelController';
-import OrbitalController from '../../renderer/OrbitableController';
+import OrbitableController from '../../renderer/OrbitableController';
 import LightController from '../../renderer/LightController';
 import DevInspector from '../../components/dev-inspector/DevInspector';
 import { TextureLoader } from 'three'
@@ -67,6 +67,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
         const master = renderer.addEntity("master");
         const cameraController = master.addController(CameraController);
+
         cameraController.offset = new Vector3(0, 5, 7);
 
         const sun = renderer.addEntity("sun");

@@ -1,16 +1,16 @@
-import Renderer from "../Renderer";
 import { Quaternion, Euler, PerspectiveCamera } from "three";
 import Controller from "../Controller";
+import GameManager from "../Renderer";
 
 export default class DragHandler {
-    public renderer: Renderer | null = null;
+    public renderer: GameManager | null = null;
     private isDragging = false;
     private previousMousePosition = {
         x: 0,
         y: 0
     };
 
-    setup(renderer: Renderer, camera: PerspectiveCamera) {
+    setup(renderer: GameManager, camera: PerspectiveCamera) {
 
         this.renderer = renderer;
         this.renderer.getDOMElement().addEventListener('mousedown', () => {
