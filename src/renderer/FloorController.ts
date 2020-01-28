@@ -45,7 +45,7 @@ export default class FloorController extends Controller {
         }
     }
 
-    onClick(point: Vector3) {
+    onMouseDown(point: Vector3) {
         if(this.cameraController) {
             this.cameraController.setPosition(point);
         }

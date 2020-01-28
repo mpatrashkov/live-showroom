@@ -37,7 +37,7 @@ export default class GameManager {
             this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
             this.activeCamera.aspect = this.getCameraAspectRatio();
             this.activeCamera.updateProjectionMatrix();
-        }   
+        }
 
         this.mainCamera.position.z = 5;
 
@@ -97,26 +97,34 @@ export default class GameManager {
 
     handleClicks() {
         Controller.renderer.domElement.addEventListener("click", (event) => {
-            const raycaster = new Raycaster();
-
-            const mouse = new Vector2();
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
-            const intersects = raycaster.intersectObjects(Controller.scene.children, true);
-            for(let intersect of intersects) {   
-                const clickEvent = (object: Object3D) => {
-                    const hitEntity = this.findEntityByName(object.name);
-                    hitEntity?.controllers.forEach(controller => controller.onClick(intersect.point))
-                    if(object.parent) {
-                        clickEvent(object.parent);
-                    }
-                }
-
-                clickEvent(intersect.object);
-            }
+            this.handleMouseAction(event, controller => controller.onClick);
         }, true);
+
+        Controller.renderer.domElement.addEventListener("mousedown", (event) => {
+            this.handleMouseAction(event, controller => controller.onMouseDown);
+        }, true);
+    }
+
+    handleMouseAction(event: MouseEvent, callbackFunction: (controller: Controller) => Function) {
+        const raycaster = new Raycaster();
+
+        const mouse = new Vector2();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
+        const intersects = raycaster.intersectObjects(Controller.scene.children, true);
+        for(let intersect of intersects) {   
+            const clickEvent = (object: Object3D) => {
+                const hitEntity = this.findEntityByName(object.name);
+                hitEntity?.controllers.forEach(controller => callbackFunction(controller).call(controller, intersect.point))
+                if(object.parent) {
+                    clickEvent(object.parent);
+                }
+            }
+
+            clickEvent(intersect.object);
+        }
     }
 
     handleDrag() {

@@ -1,19 +1,24 @@
 import Controller from "../Controller";
 import Entity from "../Entity";
 import CameraOrbitController from "./CameraOrbitController";
-import { Matrix4, Quaternion, Vector3 } from "three";
+import { Matrix4, Quaternion, Vector3, Euler } from "three";
 import Time from "../utils/Time";
 import CameraMovementController from "./CameraMovementController";
+import Drag from "../utils/Drag";
+import MathHelpers from "../utils/MathHelpers";
+import CameraRotationController from "./CameraRotationController";
 
 export default class CameraController extends Controller {
     public orbitOffset = new Vector3(0, 1, 2);
 
     private cameraMovementController: CameraMovementController | null = null;
     private cameraOrbitController: CameraOrbitController | null = null;
+    private cameraRotationController: CameraRotationController | null = null;
 
     start() {
         this.cameraMovementController = this.entity.addController(CameraMovementController)
         this.cameraOrbitController = this.entity.addController(CameraOrbitController)
+        this.cameraRotationController = this.entity.addController(CameraRotationController)
         this.cameraOrbitController.enabled = false;
     }
 
@@ -52,6 +57,10 @@ export default class CameraController extends Controller {
             if(this.cameraOrbitController) {
                 this.cameraOrbitController.enabled = true;
                 this.cameraOrbitController.target = target;
+
+                if(this.cameraRotationController) {
+                    this.cameraRotationController.enabled = false;
+                }
             }
         });
     }
@@ -63,6 +72,10 @@ export default class CameraController extends Controller {
 
         if(this.cameraMovementController) {
             this.cameraMovementController.setPosition(point);
+        }
+
+        if(this.cameraRotationController) {
+            this.cameraRotationController.enabled = true;
         }
     }
 }
