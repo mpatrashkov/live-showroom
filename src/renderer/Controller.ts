@@ -49,6 +49,8 @@ abstract class Controller {
 
     onMouseDown(point?: Vector3) { }
 
+    onMouseUp(point?: Vector3) { }
+
     onMouseDrag(deltaDrag: DeltaDrag) { }
 
     onUpdate(callback: UpdateCallback) {

@@ -106,6 +106,10 @@ export default class GameManager {
         Controller.renderer.domElement.addEventListener("mousedown", (event) => {
             this.handleMouseAction(event, controller => controller.onMouseDown);
         }, true);
+
+        Controller.renderer.domElement.addEventListener("mouseup", (event) => {
+            this.handleMouseAction(event, controller => controller.onMouseUp);
+        }, true);
     }
 
     handleMouseAction(event: MouseEvent, callbackFunction: (controller: Controller) => Function) {
