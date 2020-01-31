@@ -9,8 +9,6 @@ export default class ModelController extends Controller {
     load(model: string, material: string) {
         const objLoader = new OBJLoader();
         const mtlLoader = new MTLLoader();
-        // mtlLoader.setResourcePath(assetsPath)
-        // mtlLoader.setPath(assetsPath)
         mtlLoader.load(material, materials => {
             materials.preload();
 
@@ -26,17 +24,6 @@ export default class ModelController extends Controller {
                 object.receiveShadow = true;
 
                 this.mesh.add(object);
-
-                var geometry = new Geometry();
-
-                geometry.vertices.push(this.transform.position);
-                geometry.vertices.push(this.transform.position.clone().add(new Vector3(0, 10, 0)));
-
-                var line = new Line(geometry, new LineBasicMaterial({
-                    color: 0x00FF00
-                }));
-
-                Controller.scene.add(line);
             })  
         })
     }

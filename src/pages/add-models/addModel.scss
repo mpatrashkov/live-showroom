@@ -1,0 +1,122 @@
+.ant-steps {
+    width: auto ;
+}
+
+.steps {
+    margin: 3rem 4rem;
+}
+
+.step-content {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.upload-model {
+    max-width: 23rem;
+    flex: 1 0 30px;
+
+
+    &:before {
+        display: block;
+        content: '';
+        flex: 1 0 30px;
+    }
+
+    &:after {
+        display: block;
+        content: '';
+        flex: 1 0 30px;
+    }
+
+    .form-group {
+        &:not(:first-child) {
+            margin-top: 2rem;
+        }
+
+        &:last-child {
+            margin-top: 3rem;
+        }
+    }
+}
+
+.file {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    height: calc(1.5em + .75rem + 2px);
+    width: 100%;
+
+    input {
+        min-width: 14rem;
+        margin: 0;
+        filter: alpha(opacity=0);
+        opacity: 0;
+    }
+}
+
+.file-custom {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 5;
+    height: 2.5rem;
+    padding: .5rem 1rem;
+    line-height: 1.5;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid rgb(206, 212, 218);
+    border-radius: .25rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &:after {
+        display: block;
+        content: "";
+    }
+
+    &:before {
+        position: absolute;
+        top: -.075rem;
+        right: -.075rem;
+        bottom: -.075rem;
+        z-index: 6;
+        display: block;
+        content: "Browse";
+        height: 2.5rem;
+        padding: .5rem 1rem;
+        line-height: 1.5;
+        color: #555;
+        background-color: #eee;
+        border: 1px solid rgb(206, 212, 218);
+        border-radius: 0 .25rem .25rem 0;
+    }
+}
+
+.upload-image {
+    .form-group {
+        &:not(:first-child) {
+            margin-top: 2rem;
+        }
+
+        &:last-child {
+            margin-top: 2rem;
+        }
+    }
+}
+
+.finish {
+    text-align: center;
+
+    h2 {
+        margin-bottom: 3rem;
+    }
+
+    p {
+        font-size: 1.5em;
+        margin-bottom: 3rem;
+    }
+}
