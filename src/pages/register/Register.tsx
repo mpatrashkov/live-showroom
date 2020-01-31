@@ -82,7 +82,6 @@ class Register extends React.Component<RegisterProperties, RegisterStateInterfac
             localStorage.setItem('userId', result.userId)
 
             const { updateUser } = this.props
-            console.log(result.isAdmin)
             updateUser({
                 isAdmin: localStorage.getItem('isAdmin'),
                 isLoggedIn: true,

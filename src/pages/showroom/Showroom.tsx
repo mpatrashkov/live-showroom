@@ -212,7 +212,6 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         let modelAsRequest = await fetch(`${serverUrl}/model/get/${id}`)
         let modelAsJSON = await modelAsRequest.json();
         let model = await modelAsJSON.model;
-        console.log(model.materials[0].path)
 
         let entity = this.state.renderer.findEntityByName(this.state.clickedModel.name);
         let modelController = entity.getController(ModelController)

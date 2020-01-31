@@ -37,7 +37,6 @@ export default class Drag {
         renderer.getDOMElement().addEventListener('mousemove', (e) => {
             if(this.isDragging) {
                 Drag.hasDragged = true;
-                console.log(Drag.hasDragged)
                 this.deltaDrag = {
                     x: e.offsetX - this.previousMousePosition.x,
                     y: e.offsetY - this.previousMousePosition.y

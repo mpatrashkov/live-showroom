@@ -44,7 +44,6 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
     }
 
     onChangeFileHandler = (e: any) => {
-        console.log(e.target.files[0].name)
         this.setState({
             file: e.target.files[0],
             fileInputText: e.target.files[0].name
@@ -78,7 +77,6 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
             method: 'POST',
             body: data
         }).then((res) => {
-            console.log(res)
             const currentStep = this.state.currentStep + 1;
             this.setState({ currentStep });
         })
@@ -94,7 +92,6 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
             method: 'POST',
             body: data
         }).then((res) => {
-            console.log(res)
             const currentStep = this.state.currentStep + 1;
             this.setState({ currentStep });
         })

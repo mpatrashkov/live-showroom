@@ -4,6 +4,7 @@ import { serverUrl } from '../../config/config';
 import { Form, Button } from 'react-bootstrap'
 import withUserContext from '../../hocs/WithUserContext';
 import { Redirect } from 'react-router-dom';
+import {message} from 'antd'
 
 interface AddMaterialState {
     file: any,
@@ -44,7 +45,6 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
 
     onSubmitHandler = (e: any) => {
         e.preventDefault()
-        console.log(this.state)
         let data = new FormData()
         data.append('file', this.state.file)
         data.append('model', this.state.model)
@@ -52,7 +52,7 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
             method: 'POST',
             body: data
         }).then((res) => {
-            console.log(res)
+            message.success("Material added successfully!")
         })
     }
 
