@@ -50,7 +50,6 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
         })
         let result = await data.json()
         if (result.token) {
-            console.log(result)
 
             localStorage.setItem('isAdmin', result.isAdmin)
             localStorage.setItem('token', result.token)

@@ -32,9 +32,6 @@ export default class CameraController extends Controller {
     }
 
     update() {
-        //console.log(Controller.mainCamera.quaternion)
-        //this.orbitControls?.update();
-
         if(this.isLocked) {
             this.orbitControls?.update();
         }
