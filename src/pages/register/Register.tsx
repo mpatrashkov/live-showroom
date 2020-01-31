@@ -3,6 +3,7 @@ import './register.scss';
 import { Form, Input, Icon, Button, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import withUserContext from '../../hocs/WithUserContext';
+import { serverUrl } from '../../config/config';
 
 interface RegisterStateInterface {
     username: string,
@@ -65,7 +66,7 @@ class Register extends React.Component<RegisterProperties, RegisterStateInterfac
 
     onSubmit = async (e: any) => {
         e.preventDefault();
-        let data = await fetch('http://localhost:9999/auth/signup', {
+        let data = await fetch(`http://${serverUrl}/auth/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
