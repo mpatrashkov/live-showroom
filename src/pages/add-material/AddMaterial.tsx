@@ -52,7 +52,7 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
             method: 'POST',
             body: data
         }).then((res) => {
-            message.success(res.message)
+            message.success("Material added successfully!")
         })
     }
 
