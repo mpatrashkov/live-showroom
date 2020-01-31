@@ -94,10 +94,13 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
                 cube.transform.position.x = 12;
             } else if (m.type == "Dinner Table") {
                 cube.transform.position.z = -4.5;
+                cube.transform.position.x = -6;
             } else if (m.type == "Garden Chair") {
                 cube.transform.position.x = 8;
                 cube.transform.position.z = -10;
-
+            } else if (m.type == "Armchair") {
+                cube.transform.position.x = 10;
+                cube.transform.position.z = 3;
             }
         })
 
@@ -208,22 +211,18 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         let modelAsRequest = await fetch(`http://localhost:9999/model/get/${id}`)
         let modelAsJSON = await modelAsRequest.json();
         let model = await modelAsJSON.model;
-        console.log(model)
+        console.log(model.materials[0].path)
 
         let entity = this.state.renderer.findEntityByName(this.state.clickedModel.name);
         let modelController = entity.getController(ModelController)
+
         modelController.clear()
         modelController.load(model.path, model.materials[0].path)
     }
 
     async componentDidUpdate() {
         if (this.state.modelIsClicked && this.state.loadCounter === 0) {
-            let modelAsRequest = await fetch(`http://localhost:9999/type/models/${this.state.clickedModel.type}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            let modelAsRequest = await fetch(`http://localhost:9999/type/models/${this.state.clickedModel.type}`)
 
             let modelsAsJSON = await modelAsRequest.json()
             let models = await modelsAsJSON.models;

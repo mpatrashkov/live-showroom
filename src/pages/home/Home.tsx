@@ -51,7 +51,7 @@ export default class Home extends React.Component {
                     </div>
                 </div>
                 <div className="information">
-                    <h2>Why You Should Choose Use?</h2>
+                    <h2>Why You Should Choose Us?</h2>
                     <ul className="information-line">
                         <li>
                             <h3>Interactive Showroom</h3>

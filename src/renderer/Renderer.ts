@@ -10,6 +10,7 @@ import EventSystem, { EventType } from "./utils/EventSystem";
 
 import Drag from "./utils/Drag";
 import Input from "./utils/Input";
+import OrbitableController from "./OrbitableController";
 
 export default class GameManager {
     public scene: Scene;
@@ -126,14 +127,20 @@ export default class GameManager {
                 const hitEntity = this.findEntityByName(object.name);
                 hitEntity?.controllers.forEach(controller => callbackFunction(controller).call(controller, intersect.point))
                 if(object.parent) {
-                    if (hitEntity) {
-                        EventSystem.fire(EventType.OrbitableClicked, hitEntity.name)
+                    EventSystem.fire(EventType.OrbitableClicked, hitEntity?.name)
+                    if (hitEntity?.getController(OrbitableController)) {
+                        return true;
                     }
-                    clickEvent(object.parent);
+                    
+                    if(clickEvent(object.parent)) {
+                        return true;
+                    }
                 }
             }
 
-            clickEvent(intersect.object);
+            if(clickEvent(intersect.object)){
+                break;
+            }
         }
     }
 

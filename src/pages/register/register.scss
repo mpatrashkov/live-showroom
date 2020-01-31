@@ -1,0 +1,48 @@
+.register-page {
+    padding: 3rem 5rem;
+
+    .register-form {
+        margin: auto;
+        max-width: 36rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "firstName lastName"
+                             "username username"
+                             "email email"
+                             "password password"
+                             "buttons buttons";
+        grid-column-gap: 1rem;
+
+        &-item:nth-child(1) {
+            grid-area: firstName;
+        }
+
+        &-item:nth-child(2) {
+            grid-area: lastName;
+        }
+
+        &-item:nth-child(3) {
+            grid-area: username;
+        }
+
+        &-item:nth-child(4) {
+            grid-area: password;
+        }
+
+        &-item:nth-child(5) {
+            grid-area: email;
+        }
+
+        .form-buttons {
+            grid-area: buttons;
+
+            .ant-form-item-children {
+            
+                display: grid;
+                grid-template-columns: 0.3fr 1fr;
+                grid-column-gap: 1rem;
+                align-items: baseline;
+            }
+        }
+    }
+}

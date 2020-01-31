@@ -1,0 +1,31 @@
+.upload-material {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+
+    &-form {
+        flex: 1 0 30px;
+        max-width: 23rem;
+
+        &:before {
+            display: block;
+            content: '';
+            flex: 1 0 30px;
+        }
+
+        &:after {
+            display: block;
+            content: '';
+            flex: 1 0 30px;
+        }
+
+        .form-group:last-child {
+            margin-top: 3rem;
+        }
+    }
+}
+
+.material-heading {
+    text-align: center;
+    margin-top: 3rem;
+}
