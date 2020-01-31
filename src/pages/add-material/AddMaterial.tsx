@@ -1,5 +1,6 @@
 import React from 'react';
 import "./add-material.scss";
+import { serverUrl } from '../../config/config';
 
 interface AddMaterialState {
     file: any,
@@ -34,7 +35,7 @@ export default class AddMaterial extends React.Component<{}, AddMaterialState> {
         let data = new FormData()
         data.append('file', this.state.file)
         data.append('model', this.state.model)
-        fetch('http://localhost:9999/material/upload', {
+        fetch(`${serverUrl}/material/upload`, {
             method: 'POST',
             body: data
         }).then((res) => { 

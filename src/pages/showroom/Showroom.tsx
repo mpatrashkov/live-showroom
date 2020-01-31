@@ -15,6 +15,7 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import fs from 'fs'
 import EventSystem, { EventType } from '../../renderer/utils/EventSystem';
 import Entity from '../../renderer/Entity'; 
+import { serverUrl } from '../../config/config';
  
 interface ShowroomState {
     renderer: GameManager | null,
@@ -37,7 +38,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
     };
 
     async componentDidMount() {
-        let defaultModelsRequest = await fetch("http://localhost:9999/model/default")
+        let defaultModelsRequest = await fetch(`${serverUrl}/model/default`)
         let defaultModelsJSON = await defaultModelsRequest.json()
         let defaultModels = await defaultModelsJSON.models
         this.setState({
@@ -205,7 +206,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
     }
 
     clickHandler = async (id) => {
-        let modelAsRequest = await fetch(`http://localhost:9999/model/get/${id}`)
+        let modelAsRequest = await fetch(`${serverUrl}/model/get/${id}`)
         let modelAsJSON = await modelAsRequest.json();
         let model = await modelAsJSON.model;
         console.log(model)
@@ -218,7 +219,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
     async componentDidUpdate() {
         if (this.state.modelIsClicked && this.state.loadCounter === 0) {
-            let modelAsRequest = await fetch(`http://localhost:9999/type/models/${this.state.clickedModel.type}`, {
+            let modelAsRequest = await fetch(`${serverUrl}/type/models/${this.state.clickedModel.type}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
