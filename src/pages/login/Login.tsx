@@ -42,7 +42,7 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
 
     onSubmit = async (e: any) => {
         e.preventDefault();
-        let data = await fetch(`http://${serverUrl}/auth/signin`, {
+        let data = await fetch(`${serverUrl}/auth/signin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

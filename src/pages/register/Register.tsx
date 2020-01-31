@@ -66,7 +66,7 @@ class Register extends React.Component<RegisterProperties, RegisterStateInterfac
 
     onSubmit = async (e: any) => {
         e.preventDefault();
-        let data = await fetch(`http://${serverUrl}/auth/signup`, {
+        let data = await fetch(`${serverUrl}/auth/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
