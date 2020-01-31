@@ -18,6 +18,16 @@ export default class Drag {
 
     public static isDragging = false;
 
+    private static hasDragged = false;
+
+    public static startDragCheck() {
+        Drag.hasDragged = false;
+    }
+
+    public static checkDrag() {
+        return Drag.hasDragged;
+    }
+
     public static setup(renderer: GameManager) {
         renderer = renderer;
         renderer.getDOMElement().addEventListener('mousedown', (e) => {
@@ -27,6 +37,7 @@ export default class Drag {
         renderer.getDOMElement().addEventListener('mousemove', (e) => {
             if(this.isDragging) {
                 Drag.hasDragged = true;
+                console.log(Drag.hasDragged)
                 this.deltaDrag = {
                     x: e.offsetX - this.previousMousePosition.x,
                     y: e.offsetY - this.previousMousePosition.y
