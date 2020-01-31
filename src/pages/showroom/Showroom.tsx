@@ -73,6 +73,11 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         const sun = renderer.addEntity("sun");
         sun.addController(LightController);
 
+        const cube = renderer.addEntity("cube");
+        // cube.transform.position = new Vector3(0, 5, 0);
+        cube.addController(CubeController);
+        cube.addController(OrbitableController).cameraController = cameraController;
+
         EventSystem.on(EventType.OrbitableClicked, (name) => {
             for (let i = 0; i < this.state.defaultModels.length; i++) {
                 if (this.state.defaultModels[i].name == name) {
