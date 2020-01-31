@@ -35,7 +35,7 @@ export default class CameraMovementController extends Controller {
         this.targetPosition = point;
 
         // Keep the y-axis the same so that the camera does not get into the floor
-        this.targetPosition.y = this.startingPosition.y;
+        // this.targetPosition.y = this.startingPosition.y;
 
         this.moving = true;
     }

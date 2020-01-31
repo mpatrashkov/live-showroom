@@ -31,12 +31,12 @@ abstract class Controller {
     }
 
     startUpdate() {
-        this.update();
         this.updateListeners.forEach(listener => listener(() => {
             this.updateListeners.splice(
                 this.updateListeners.indexOf(listener)
             );
         }));
+        this.update();
     }
 
     start() { }

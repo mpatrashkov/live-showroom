@@ -1,10 +1,10 @@
 export default class MathHelpers {
-    public static between(x: number, min: number, max: number) {
+    public static clamp(x: number, min: number, max: number) {
         if(x < min) {
-            x = min;
+            return min;
         }
         else if(x > max) {
-            x = max;
+            return max;
         }
 
         return x;
