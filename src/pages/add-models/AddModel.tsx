@@ -1,5 +1,6 @@
 import React from 'react';
 import "./addModel.scss";
+import { serverUrl } from '../../config/config';
 import { Steps } from 'antd'
 import { Form, Button } from 'react-bootstrap'
 import withUserContext from '../../hocs/WithUserContext';
@@ -72,7 +73,7 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
         e.preventDefault()
         let data = new FormData()
         data.append('file', this.state.image)
-        fetch(`http://localhost:9999/model/upload/image/${this.state.name}`, {
+        fetch(`${serverUrl}/model/upload/image/${this.state.file.name}`, {
             method: 'POST',
             body: data
         }).then((res) => {
@@ -87,7 +88,7 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
         data.append('file', this.state.file)
         data.append('type', this.state.type)
         data.append('name', this.state.name)
-        fetch(`http://localhost:9999/model/upload`, {
+        fetch(`${serverUrl}/model/upload`, {
             method: 'POST',
             body: data
         }).then((res) => {

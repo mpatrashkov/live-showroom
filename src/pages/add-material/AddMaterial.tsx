@@ -1,5 +1,6 @@
 import React from 'react';
 import "./add-material.scss";
+import { serverUrl } from '../../config/config';
 import { Form, Button } from 'react-bootstrap'
 import withUserContext from '../../hocs/WithUserContext';
 import { Redirect } from 'react-router-dom';
@@ -47,7 +48,7 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
         let data = new FormData()
         data.append('file', this.state.file)
         data.append('model', this.state.model)
-        fetch('http://localhost:9999/material/upload', {
+        fetch(`${serverUrl}/material/upload`, {
             method: 'POST',
             body: data
         }).then((res) => {

@@ -1,0 +1,1 @@
+export const serverUrl = "https://liveshowroomserver.azurewebsites.net";

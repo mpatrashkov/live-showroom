@@ -2,15 +2,13 @@ import Controller from "../Controller";
 import Drag from "../utils/Drag";
 import { Quaternion, Euler, Vector3, Camera } from "three";
 import MathHelpers from "../utils/MathHelpers";
+import CameraController from "./CameraController";
 
 export default class CameraRotationController extends Controller {
     public sensitivity = 1 / 300;
-    public maxPitchAngle = 60;
-    public minPitchAngle = -30;
 
     start() {
-        this.maxPitchAngle = MathHelpers.toRad(this.maxPitchAngle);
-        this.minPitchAngle = MathHelpers.toRad(this.minPitchAngle);
+        const cameraController = this.entity.getController(CameraController);
 
         const camera = Controller.mainCamera;
         Drag.onDrag((deltaDrag) => {
@@ -18,25 +16,27 @@ export default class CameraRotationController extends Controller {
                 return;
             }
 
-            let rotationX = camera.rotation.x;
+            // console.log(MathHelpers.toDeg(camera.rotation.x), MathHelpers.toDeg(camera.rotation.y), MathHelpers.toDeg(camera.rotation.z));
 
             let pitchAngle = deltaDrag.y * this.sensitivity;
-            rotationX += pitchAngle;
+            cameraController.currentPitchAngle += pitchAngle;
 
             let yawAngle = deltaDrag.x * this.sensitivity;
-
-            if(rotationX > this.maxPitchAngle) {
+            if(cameraController.currentPitchAngle > cameraController.maxPitchAngle) {
                 pitchAngle = 0;
+                cameraController.currentPitchAngle = cameraController.maxPitchAngle;
             }
-            else if(rotationX < this.minPitchAngle) {
+            else if(cameraController.currentPitchAngle < cameraController.minPitchAngle) {
                 pitchAngle = 0;
+                cameraController.currentPitchAngle = cameraController.minPitchAngle;
             }
 
             const pitch = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), pitchAngle); // X
             const yaw = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), yawAngle); // Y
-            const roll = camera.quaternion.clone(); // Z
+            const roll = this.transform.rotation.clone(); // Z
             
-            camera.quaternion.copy(yaw.multiply(roll.multiply(pitch)))
+            const newRotation = yaw.multiply(roll.multiply(pitch));
+            this.transform.rotation.copy(newRotation);
         })
     }
 }
