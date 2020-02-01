@@ -14,7 +14,7 @@ export default class CameraOrbitController extends Controller {
 
     private autoRotate = true;
 
-    public angleRange: [number, number] = [0, 55];
+    public angleRange: [number, number] = [5, 55];
     public startAutoRotateDuration = 3000;
     private startAutoRotateTimeout: NodeJS.Timeout | null = null;
 
