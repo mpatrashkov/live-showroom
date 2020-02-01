@@ -39,9 +39,6 @@ export default class CameraController extends Controller {
 
     update() {
         Controller.mainCamera.quaternion.copy(this.transform.rotation);
-        if(1 / Time.deltaTime < 55) {
-            console.log(1 / Time.deltaTime)
-        }
     }
 
     private prepareCameraForOrbiting(target: Entity) {

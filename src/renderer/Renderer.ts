@@ -81,6 +81,7 @@ export default class GameManager {
         composer.addPass(this.outlinePass);
 
         const animate = (now: DOMHighResTimeStamp) => {
+            renderPass.camera = this.activeCamera;
             if (!prevTime) {
                 prevTime = now;
             }
