@@ -18,9 +18,14 @@ export default class EventSystem {
     } = { }
 
     public static fire<K extends EventType>(type: K, data?: EventDataType[K]) {
-        const listeners = EventSystem.listeners[type];
+        let listeners = EventSystem.listeners[type];
 
-        listeners.forEach(listener => listener(data))
+        if(listeners) {
+            listeners.forEach(listener => listener(data))
+        }
+        else {
+            listeners = [];
+        }
     }
 
     public static on<K extends EventType>(type: K, listener: EventListener<EventDataType[K]>) {
