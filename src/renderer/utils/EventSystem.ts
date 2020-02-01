@@ -1,11 +1,13 @@
 type EventListener<T> = (data: T) => void
 
 export enum EventType {
-    OrbitableClicked
+    OrbitableClicked,
+    OrbitableClosed
 }
 
 type EventDataType = {
-    [EventType.OrbitableClicked]: string
+    [EventType.OrbitableClicked]: string,
+    [EventType.OrbitableClosed]: never
 }
 
 export default class EventSystem {

@@ -1,12 +1,12 @@
 import Controller from "../Controller";
 import Entity from "../Entity";
 import CameraOrbitController from "./CameraOrbitController";
-import { Matrix4, Quaternion, Vector3, Euler } from "three";
+import { Matrix4, Quaternion, Vector3 } from "three";
 import Time from "../utils/Time";
 import CameraMovementController from "./CameraMovementController";
-import Drag from "../utils/Drag";
 import MathHelpers from "../utils/MathHelpers";
 import CameraRotationController from "./CameraRotationController";
+import EventSystem, { EventType } from "../utils/EventSystem";
 
 export default class CameraController extends Controller {
     public orbitOffset = new Vector3(0, 5, 7);
@@ -40,6 +40,7 @@ export default class CameraController extends Controller {
     }
 
     private prepareCameraForOrbiting(target: Entity) {
+        this.isPreparingForOrbiting = true;
         return new Promise((resolve, reject) => {
             let progress = 0;
             let targetPosition = target.transform.position.clone().add(this.orbitOffset);
@@ -56,7 +57,6 @@ export default class CameraController extends Controller {
 
             this.onUpdate((clear) => {
                 Controller.mainCamera.position.lerpVectors(startingPosition, targetPosition, progress);
-                console.log(progress);
 
                 Quaternion.slerp(startingRotation, targetRotation, newRotation, progress);
                 this.transform.rotation.set(newRotation.x, newRotation.y, newRotation.z, newRotation.w);
@@ -64,6 +64,7 @@ export default class CameraController extends Controller {
                 progress += 1 * Time.deltaTime;
 
                 if(progress >= 1) {
+                    this.isPreparingForOrbiting = false;
                     clear();
                     resolve();
                 }
@@ -75,6 +76,8 @@ export default class CameraController extends Controller {
         if(this.cameraMovementController) {
             this.cameraMovementController.enabled = false;
         }
+
+        EventSystem.fire(EventType.OrbitableClicked, target.name);
 
         this.prepareCameraForOrbiting(target).then(() => {
             if(this.cameraOrbitController) {
@@ -89,7 +92,12 @@ export default class CameraController extends Controller {
     }
 
     public setPosition(point: Vector3) {
+        if(this.isPreparingForOrbiting) {
+            return;
+        }
+
         point.y = this.cameraStartingY;
+
 
         if(this.cameraOrbitController) {
             this.cameraOrbitController.enabled = false;
@@ -99,6 +107,7 @@ export default class CameraController extends Controller {
         }
 
         if(this.cameraMovementController) {
+            EventSystem.fire(EventType.OrbitableClosed);
             this.cameraMovementController.setPosition(point);
         }
 

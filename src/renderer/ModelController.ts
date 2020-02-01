@@ -1,9 +1,6 @@
 import Controller from "./Controller"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
-import { Vector3, Geometry, Line, LineBasicMaterial } from "three";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-
-const assetsPath = process.env.PUBLIC_URL + "/assets/models/";
 
 export default class ModelController extends Controller {
     load(model: string, material: string) {

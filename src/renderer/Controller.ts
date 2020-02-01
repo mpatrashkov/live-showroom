@@ -1,4 +1,4 @@
-import { Scene, Mesh, WebGLRenderer, PerspectiveCamera, Raycaster, Vector2, Vector3 } from "three";
+import { Scene, Mesh, WebGLRenderer, PerspectiveCamera, Vector3 } from "three";
 import Entity from "./Entity";
 import Transform from "./Transform";
 import GameManager from "./Renderer";

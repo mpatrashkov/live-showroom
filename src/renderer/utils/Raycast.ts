@@ -27,4 +27,32 @@ export default class Raycast {
 
         return null;
     }
+
+    public static getAll(origin: Vector3, direction: Vector3, pool: Entity[] = []): RaycastHit[] {
+        const raycast = new Raycaster(origin, direction.normalize());
+        const intersects = raycast.intersectObjects(Controller.scene.children, true);
+
+        const hits: RaycastHit[] = [];
+        for(let intersect of intersects) {
+            const clickEvent = (object: Object3D) => {
+                const hitEntity = Controller.manager.findEntityByName(object.name);
+                if(hitEntity) {
+                    if(pool.length === 0 || pool.includes(hitEntity)) {
+                        hits.push({
+                            entity: hitEntity,
+                            point: intersect.point
+                        });
+                    }
+                }
+
+                if(object.parent) {
+                    clickEvent(object.parent);
+                }
+            }
+
+            clickEvent(intersect.object);
+        }
+
+        return hits;
+    }
 }

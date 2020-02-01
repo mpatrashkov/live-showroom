@@ -24,7 +24,7 @@ export default class Home extends React.Component {
                 <div className="services">
                     <div className="service">
                         <div className="service-img">
-                            <img src="https://www.minotti.com/media/immagini/25025_z_10_MINOTTI_COMPANY_SHOWROOM_2019.jpg"/>
+                            <img src="https://www.minotti.com/media/immagini/25025_z_10_MINOTTI_COMPANY_SHOWROOM_2019.jpg" alt=""/>
                         </div>
                         <div className="service-info">
                             <h2>Choose From Our Live Showroom</h2>
@@ -33,7 +33,7 @@ export default class Home extends React.Component {
                     </div>
                     <div className="service">
                         <div className="service-img">
-                            <img src="https://i1.wp.com/www.kaldata.com/wp-content/uploads/2019/01/Amazon-Showroom.jpg?ssl=1"/>
+                            <img src="https://i1.wp.com/www.kaldata.com/wp-content/uploads/2019/01/Amazon-Showroom.jpg?ssl=1" alt=""/>
                         </div>
                         <div className="service-info">
                             <h2>Design The Room Of Your Dreams</h2>
@@ -42,7 +42,7 @@ export default class Home extends React.Component {
                     </div>
                     <div className="service">
                         <div className="service-img">
-                            <img src="https://i.pinimg.com/originals/1a/cc/67/1acc67a3c1f80a8b4b9561d336823f25.jpg"/>
+                            <img src="https://i.pinimg.com/originals/1a/cc/67/1acc67a3c1f80a8b4b9561d336823f25.jpg" alt=""/>
                         </div>
                         <div className="service-info">
                             <h2>Huge Variaty In Our Catalog</h2>

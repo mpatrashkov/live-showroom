@@ -1,5 +1,5 @@
 import Controller from "../Controller";
-import { Vector3, Camera } from "three";
+import { Vector3 } from "three";
 import Time from "../utils/Time";
 
 export default class CameraMovementController extends Controller {

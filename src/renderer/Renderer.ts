@@ -1,16 +1,11 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Camera, BoxGeometry, MeshBasicMaterial, Mesh, Raycaster, Vector2, Color, Object3D, Quaternion } from "three";
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
+import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Object3D, Quaternion } from "three";
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
-import DragHandler from "./utils/DragHandler";
 
-import EventSystem, { EventType } from "./utils/EventSystem";
 
 import Drag from "./utils/Drag";
 import Input from "./utils/Input";
-import OrbitableController from "./OrbitableController";
 
 export default class GameManager {
     public scene: Scene;
@@ -101,24 +96,22 @@ export default class GameManager {
 
     handleClicks() {
         Controller.renderer.domElement.addEventListener("click", (event) => {
-            this.handleMouseAction(event, controller => controller.onClick);
+            this.handleMouseAction(controller => controller.onClick);
         }, true);
 
         Controller.renderer.domElement.addEventListener("mousedown", (event) => {
-            this.handleMouseAction(event, controller => controller.onMouseDown);
+            this.handleMouseAction(controller => controller.onMouseDown);
         }, true);
 
         Controller.renderer.domElement.addEventListener("mouseup", (event) => {
-            this.handleMouseAction(event, controller => controller.onMouseUp);
+            this.handleMouseAction(controller => controller.onMouseUp);
         }, true);
     }
 
-    handleMouseAction(event: MouseEvent, callbackFunction: (controller: Controller) => Function) {
+    handleMouseAction(callbackFunction: (controller: Controller) => Function) {
         const raycaster = new Raycaster();
 
-        const mouse = new Vector2();
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        const mouse = Input.mousePosition;
 
         raycaster.setFromCamera(mouse.clone(), Controller.mainCamera);
         const intersects = raycaster.intersectObjects(Controller.scene.children, true);
@@ -127,25 +120,12 @@ export default class GameManager {
                 const hitEntity = this.findEntityByName(object.name);
                 hitEntity?.controllers.forEach(controller => callbackFunction(controller).call(controller, intersect.point))
                 if(object.parent) {
-                    EventSystem.fire(EventType.OrbitableClicked, hitEntity?.name)
-                    if (hitEntity?.getController(OrbitableController)) {
-                        return true;
-                    }
-                    
-                    if(clickEvent(object.parent)) {
-                        return true;
-                    }
+                    clickEvent(object.parent);
                 }
             }
 
-            if(clickEvent(intersect.object)){
-                break;
-            }
+            clickEvent(intersect.object);
         }
-    }
-
-    handleDrag() {
-
     }
 
     addEntity(name: string): Entity {

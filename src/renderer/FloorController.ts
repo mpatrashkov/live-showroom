@@ -1,12 +1,11 @@
 import Controller from "./Controller";
-import { BoxGeometry, MeshBasicMaterial, PlaneGeometry, Euler, TextureLoader, MeshLambertMaterial, Vector2, RepeatWrapping, Vector3, Raycaster, Quaternion } from "three";
+import { MeshBasicMaterial, PlaneGeometry, Euler, TextureLoader, Vector2, RepeatWrapping, Vector3 } from "three";
 import CameraController from "./camera/CameraController";
 import Input from "./utils/Input";
 import Entity from "./Entity";
 import Raycast from "./utils/Raycast";
 import CircleController from "./CircleController";
 import MathHelpers from "./utils/MathHelpers";
-import DragHandler from "./utils/DragHandler";
 import Drag from "./utils/Drag";
 
 export default class FloorController extends Controller {
@@ -47,10 +46,9 @@ export default class FloorController extends Controller {
         }
     }
 
-    onMouseDown(point: Vector3) {
+    onMouseDown() {
         if(this.cameraController) {
             Drag.startDragCheck();
-            // this.cameraController.setPosition(point);
         }
     }
 

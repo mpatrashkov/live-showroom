@@ -1,7 +1,6 @@
 import Controller from "../Controller";
 import Drag from "../utils/Drag";
-import { Quaternion, Euler, Vector3, Camera } from "three";
-import MathHelpers from "../utils/MathHelpers";
+import { Quaternion, Vector3 } from "three";
 import CameraController from "./CameraController";
 
 export default class CameraRotationController extends Controller {
@@ -10,13 +9,10 @@ export default class CameraRotationController extends Controller {
     start() {
         const cameraController = this.entity.getController(CameraController);
 
-        const camera = Controller.mainCamera;
         Drag.onDrag((deltaDrag) => {
             if(!this.enabled) {
                 return;
             }
-
-            // console.log(MathHelpers.toDeg(camera.rotation.x), MathHelpers.toDeg(camera.rotation.y), MathHelpers.toDeg(camera.rotation.z));
 
             let pitchAngle = deltaDrag.y * this.sensitivity;
             cameraController.currentPitchAngle += pitchAngle;

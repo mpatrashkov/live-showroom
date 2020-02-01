@@ -29,7 +29,6 @@ export default class Drag {
     }
 
     public static setup(renderer: GameManager) {
-        renderer = renderer;
         renderer.getDOMElement().addEventListener('mousedown', (e) => {
             this.isDragging = true;
             this.resetDragState(e);

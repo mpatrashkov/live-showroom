@@ -2,11 +2,7 @@ import React from 'react'
 import {UserConsumer} from '../contexts/user-context'
 
 function withUserContext (Component){
-    return class extends React.Component{
-        constructor(props){
-            super(props)
-        }
-
+    return class extends React.Component {
         render() {
             return (
                 <UserConsumer>

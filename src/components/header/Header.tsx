@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "./header.scss"
 import withUserContext from '../../hocs/WithUserContext';
 
