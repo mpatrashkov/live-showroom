@@ -4,12 +4,13 @@ import { serverUrl } from '../../config/config';
 import { Form } from 'react-bootstrap'
 import withUserContext from '../../hocs/WithUserContext';
 import { Redirect } from 'react-router-dom';
-import {message} from 'antd'
+import { message, Spin } from 'antd'
 
 interface AddMaterialState {
     file: any,
     model: string,
-    fileInputText: string
+    fileInputText: string,
+    loading: boolean
 }
 
 interface AddMaterialProperties {
@@ -27,13 +28,15 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
         this.state = {
             file: null,
             model: '',
-            fileInputText: 'Choose Material...'
+            fileInputText: 'Choose Material...',
+            loading: false
         }
     }
 
     onChangeFileHandler = (e: any) => {
         this.setState({
-            file: e.target.files[0]
+            file: e.target.files[0],
+            fileInputText: e.target.files[0].name
         })
     }
 
@@ -45,14 +48,22 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
 
     onSubmitHandler = (e: any) => {
         e.preventDefault()
-        let data = new FormData()
-        data.append('file', this.state.file)
-        data.append('model', this.state.model)
-        fetch(`${serverUrl}/material/upload`, {
-            method: 'POST',
-            body: data
-        }).then((res) => {
-            message.success("Material added successfully!")
+        const {file, model} = this.state
+        this.setState({
+            loading: true
+        }, () => {
+            let data = new FormData()
+            data.append('file', file)
+            data.append('model', model)
+            fetch(`${serverUrl}/material/upload`, {
+                method: 'POST',
+                body: data
+            }).then((res) => {
+                message.success("Material added successfully!")
+                this.setState({
+                    loading: false
+                })
+            })
         })
     }
 
@@ -63,7 +74,7 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
             )
         }
         return (
-            <React.Fragment>
+            <Spin spinning={this.state.loading}>
                 <h2 className="material-heading">Enter Material For Existing Model</h2>
                 <div className="upload-material">
                     <Form onSubmit={this.onSubmitHandler} className="upload-material-form">
@@ -83,7 +94,7 @@ class AddMaterial extends React.Component<AddMaterialProperties, AddMaterialStat
                         </Form.Group>
                     </Form>
                 </div>
-            </React.Fragment >
+            </Spin>
         )
     }
 }

@@ -64,7 +64,6 @@ export default class CameraOrbitController extends Controller {
             }
 
             const hits = Raycast.getAll(pos.clone(), this.target.transform.position.clone().sub(pos));
-
             for(let hit of hits) {
                 if(hit.entity === this.target) {
                     break;

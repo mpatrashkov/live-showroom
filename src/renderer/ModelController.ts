@@ -1,6 +1,7 @@
 import Controller from "./Controller"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
+import EventSystem, { EventType } from "./utils/EventSystem";
 
 export default class ModelController extends Controller {
     load(model: string, material: string) {
@@ -21,7 +22,7 @@ export default class ModelController extends Controller {
                 object.receiveShadow = true;
 
                 this.mesh.add(object);
-                console.log("Finitto!");
+                EventSystem.fire(EventType.ModelLoaded);
             })  
         })
     }
