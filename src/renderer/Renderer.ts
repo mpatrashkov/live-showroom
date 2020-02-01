@@ -1,19 +1,23 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Object3D, Quaternion } from "three";
+import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Object3D, Quaternion, Vector2 } from "three";
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
 
+import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
 
 import Drag from "./utils/Drag";
 import Input from "./utils/Input";
+import Outline from "./utils/Outline";
 
 export default class GameManager {
     public scene: Scene;
     public mainCamera: PerspectiveCamera;
     private activeCamera: PerspectiveCamera;
     private renderer: WebGLRenderer;
-
-    // private dragHandler: DragHandler;
+    public outlinePass: OutlinePass;
 
     public entities: Entity[];
 
@@ -28,7 +32,6 @@ export default class GameManager {
 
         this.renderer = new WebGLRenderer();
         this.renderer.shadowMap.enabled = true;
-        // this.dragHandler = new DragHandler();
 
         this.renderer.setSize(mount.offsetWidth, mount.offsetHeight);
 
@@ -69,6 +72,14 @@ export default class GameManager {
             })
         })
 
+        const composer = new EffectComposer(this.renderer)
+        const renderPass = new RenderPass(this.scene, this.activeCamera);
+        composer.addPass(renderPass);
+        renderPass.renderToScreen = true;
+
+        this.outlinePass = new OutlinePass(new Vector2(window.innerWidth, window.innerHeight), this.scene, this.activeCamera);
+        composer.addPass(this.outlinePass);
+
         const animate = (now: DOMHighResTimeStamp) => {
             if (!prevTime) {
                 prevTime = now;
@@ -78,6 +89,8 @@ export default class GameManager {
             Time.deltaTime = deltaTime;
 
             prevTime = now;
+            
+            this.outlinePass.selectedObjects = Outline.getSelectedObjects();
 
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
@@ -88,7 +101,7 @@ export default class GameManager {
             });
 
             requestAnimationFrame(animate);
-            this.renderer.render(this.scene, this.activeCamera);
+            composer.render();
         };
 
         requestAnimationFrame(animate);

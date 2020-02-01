@@ -14,14 +14,27 @@ export default class Raycast {
         const intersects = raycast.intersectObjects(Controller.scene.children, true);
 
         for(let intersect of intersects) {
-            const hitEntity = Controller.manager.findEntityByName(intersect.object.name);
-            if(hitEntity) {
-                if(pool.length === 0 || pool.includes(hitEntity)) {
-                    return {
-                        entity: hitEntity,
-                        point: intersect.point
-                    };
+            const clickEvent = (object: Object3D) => {
+                const hitEntity = Controller.manager.findEntityByName(object.name);
+                if(hitEntity) {
+                    if(pool.length === 0 || pool.includes(hitEntity)) {
+                        return {
+                            entity: hitEntity,
+                            point: intersect.point
+                        };
+                    }
                 }
+
+                if(object.parent) {
+                    return clickEvent(object.parent);
+                }
+
+                return null;
+            }
+
+            const res = clickEvent(intersect.object);
+            if(res) {
+                return res;
             }
         }
 

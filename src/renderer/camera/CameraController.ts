@@ -23,6 +23,8 @@ export default class CameraController extends Controller {
 
     private isPreparingForOrbiting = false;
 
+    public isOrbiting = false;
+
     start() {
         this.maxPitchAngle = MathHelpers.toRad(this.maxPitchAngle);
         this.minPitchAngle = MathHelpers.toRad(this.minPitchAngle);
@@ -37,6 +39,9 @@ export default class CameraController extends Controller {
 
     update() {
         Controller.mainCamera.quaternion.copy(this.transform.rotation);
+        if(1 / Time.deltaTime < 55) {
+            console.log(1 / Time.deltaTime)
+        }
     }
 
     private prepareCameraForOrbiting(target: Entity) {
@@ -78,6 +83,8 @@ export default class CameraController extends Controller {
         }
 
         EventSystem.fire(EventType.OrbitableClicked, target.name);
+        console.log(1);
+        this.isOrbiting = true;
 
         this.prepareCameraForOrbiting(target).then(() => {
             if(this.cameraOrbitController) {
@@ -100,6 +107,7 @@ export default class CameraController extends Controller {
 
 
         if(this.cameraOrbitController) {
+            this.cameraOrbitController.removeTransparentObjects();
             this.cameraOrbitController.enabled = false;
             if(this.cameraMovementController) {
                 this.cameraMovementController.enabled = true;
@@ -108,6 +116,7 @@ export default class CameraController extends Controller {
 
         if(this.cameraMovementController) {
             EventSystem.fire(EventType.OrbitableClosed);
+            this.isOrbiting = false;
             this.cameraMovementController.setPosition(point);
         }
 

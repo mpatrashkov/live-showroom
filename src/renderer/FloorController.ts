@@ -37,12 +37,16 @@ export default class FloorController extends Controller {
     update() {
         const hit = Raycast.fromCamera(Input.mousePosition, [this.entity]);
         if(hit) {
+            this.movementCircle.mesh.visible = true;
             this.movementCircle?.transform.position.set(
                 hit.point.x,
                 // Give it a bit of elevation so that it doesn't bug with floor
                 hit.point.y + 0.001,
                 hit.point.z
             )
+        }
+        else {
+            this.movementCircle.mesh.visible = false;
         }
     }
 

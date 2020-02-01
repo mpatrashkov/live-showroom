@@ -8,7 +8,6 @@ export default class Input {
         const element = renderer.getDOMElement();
         element.onmousemove = function(e) {
             const rect = element.getBoundingClientRect();
-            // console.log(e.clientX, e.clientY - rect.top)
             Input.mousePosition = new Vector2(
                 ((e.clientX - rect.left) / element.offsetWidth) * 2 - 1,
                 -((e.clientY - rect.top) / element.offsetHeight) * 2 + 1

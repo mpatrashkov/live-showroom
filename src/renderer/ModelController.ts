@@ -21,6 +21,7 @@ export default class ModelController extends Controller {
                 object.receiveShadow = true;
 
                 this.mesh.add(object);
+                console.log("Finitto!");
             })  
         })
     }

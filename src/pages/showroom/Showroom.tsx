@@ -74,7 +74,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
         EventSystem.on(EventType.OrbitableClicked, (name) => {
             for (let i = 0; i < this.state.defaultModels.length; i++) {
-                if (this.state.defaultModels[i].name === name) {
+                if (this.state.defaultModels[i].name == name) {
                     this.setState({ modelIsClicked: true, clickedModel: this.state.defaultModels[i] })
                     return
                 } else {
