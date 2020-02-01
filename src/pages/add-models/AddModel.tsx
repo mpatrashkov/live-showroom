@@ -73,7 +73,7 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
         e.preventDefault()
         let data = new FormData()
         data.append('file', this.state.image)
-        fetch(`${serverUrl}/model/upload/image/${this.state.file.name}`, {
+        fetch(`${serverUrl}/model/upload/image/${this.state.name}`, {
             method: 'POST',
             body: data
         }).then((res) => {
