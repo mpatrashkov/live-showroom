@@ -4,7 +4,7 @@ import { serverUrl } from '../../config/config';
 import { Steps } from 'antd'
 import { Form, Button } from 'react-bootstrap'
 import withUserContext from '../../hocs/WithUserContext';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { Spin } from 'antd'
 
 const { Step } = Steps;
@@ -184,9 +184,13 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
                                 <div className="finish">
                                     <h2>Congratulations! You Have Successfully Added A New Model!</h2>
                                     <p>Go to the showroom to see what you have uploaded! Do you want to add another model? Simply click the button below!</p>
-                                    <Button variant="success" size="lg" onClick={this.onReset}>
-                                        {"<--"} Add Another Model
-                                </Button>
+                                    <p><strong>Don't forget to add material before going to the showroom!</strong></p>
+                                    <div className="buttons">
+                                        <Button className="button-link" variant="success" onClick={this.onReset}>
+                                            {"<--"} Add Another Model
+                                        </Button>
+                                        <Link className="btn btn-primary button-link" to="/add/material">Add Material</Link>
+                                    </div>
                                 </div>
                             ) : null
                         }
