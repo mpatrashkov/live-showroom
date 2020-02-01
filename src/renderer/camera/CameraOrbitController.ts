@@ -59,30 +59,30 @@ export default class CameraOrbitController extends Controller {
             this.transform.rotation.setFromRotationMatrix(rotationMatrix);
             this.cameraController.currentPitchAngle = -(Math.PI / 2 - sph.phi);
 
-            for(let transparentEntity of this.transparentEntities) {
-                transparentEntity.entity.mesh.material = transparentEntity.prevMaterial.clone();
-            }
+            // for(let transparentEntity of this.transparentEntities) {
+            //     transparentEntity.entity.mesh.material = transparentEntity.prevMaterial.clone();
+            // }
 
-            const hits = Raycast.getAll(pos.clone(), this.target.transform.position.clone().sub(pos));
-            for(let hit of hits) {
-                if(hit.entity === this.target) {
-                    break;
-                }
+            // const hits = Raycast.getAll(pos.clone(), this.target.transform.position.clone().sub(pos));
+            // for(let hit of hits) {
+            //     if(hit.entity === this.target) {
+            //         break;
+            //     }
 
-                const material = hit.entity.mesh.material;
-                if(material instanceof MeshBasicMaterial) {
-                    const newMaterial = material.clone();
-                    newMaterial.transparent = true;
-                    newMaterial.opacity = 0.1;
+            //     const material = hit.entity.mesh.material;
+            //     if(material instanceof MeshBasicMaterial) {
+            //         const newMaterial = material.clone();
+            //         newMaterial.transparent = true;
+            //         newMaterial.opacity = 0.1;
                     
-                    this.transparentEntities.push({
-                        entity: hit.entity,
-                        prevMaterial: material.clone()
-                    });
+            //         this.transparentEntities.push({
+            //             entity: hit.entity,
+            //             prevMaterial: material.clone()
+            //         });
 
-                    hit.entity.mesh.material = newMaterial;
-                }
-            }
+            //         hit.entity.mesh.material = newMaterial;
+            //     }
+            // }
         }
     }
 

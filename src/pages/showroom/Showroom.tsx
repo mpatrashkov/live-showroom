@@ -14,14 +14,18 @@ import { TextureLoader } from 'three'
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import EventSystem, { EventType } from '../../renderer/utils/EventSystem';
 import { serverUrl } from '../../config/config';
- 
+import { ProgressBar } from 'react-bootstrap'
+import { Button } from 'antd'
+
 interface ShowroomState {
     renderer: GameManager | null,
     defaultModels: Array<any>,
     modelIsClicked: boolean,
     clickedModel: any | null,
     catalog: Array<any>,
-    loadCounter: number
+    loadCounter: number,
+    loadedModels: number,
+    isButtonDisabled: boolean
 }
 
 export default class Showroom extends React.Component<{}, ShowroomState> {
@@ -32,7 +36,9 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         modelIsClicked: false,
         clickedModel: null,
         catalog: [],
-        loadCounter: 0
+        loadCounter: 0,
+        loadedModels: 0,
+        isButtonDisabled: true
     };
 
     async componentDidMount() {
@@ -72,10 +78,18 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         const sun = renderer.addEntity("sun");
         sun.addController(LightController);
 
-        EventSystem.on(EventType.OrbitableClicked, (name) => {
+        EventSystem.on(EventType.OrbitableClicked, async (name) => {
             for (let i = 0; i < this.state.defaultModels.length; i++) {
                 if (this.state.defaultModels[i].name === name) {
-                    this.setState({ modelIsClicked: true, clickedModel: this.state.defaultModels[i] })
+                    let modelAsRequest = await fetch(`${serverUrl}/type/models/${this.state.defaultModels[i].type}`)
+
+                    let modelsAsJSON = await modelAsRequest.json()
+                    let models = await modelsAsJSON.models;
+
+                    this.setState({
+                        modelIsClicked: true, clickedModel: this.state.defaultModels[i], catalog: models,
+                        loadCounter: 1
+                    })
                     return
                 } else {
                     this.setState({ modelIsClicked: false, loadCounter: 0 })
@@ -86,6 +100,24 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         EventSystem.on(EventType.OrbitableClosed, () => {
             this.setState({ modelIsClicked: false, loadCounter: 0 })
         });
+
+        if (this.state.loadedModels < this.state.defaultModels.length - 1) {
+            EventSystem.on(EventType.ModelLoaded, () => {
+                let loaded = this.state.loadedModels
+                this.setState({
+                    loadedModels: loaded + 1
+                }, () => {
+                    console.log(this.state.loadedModels, this.state.defaultModels.length)
+                    if (this.state.loadedModels === this.state.defaultModels.length) {
+                        this.setState({
+                            isButtonDisabled: false
+                        })
+                    }
+                })
+            })
+        }
+
+        
 
         this.state.defaultModels.forEach((m) => {
             const cube = renderer.addEntity(m.name);
@@ -116,32 +148,32 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         const wall = renderer.addEntity("wall");
         wall.addController(CubeController);
         wall.transform.position.x = 15;
-        wall.transform.position.y = 4.5;
-        wall.mesh.scale.y = 30;
+        wall.transform.position.y = 9.5;
+        wall.mesh.scale.y = 20;
         wall.mesh.scale.z = 30;
         wall.mesh.material = tileMaterial
 
         const wall1 = renderer.addEntity("wall1");
         wall1.addController(CubeController);
         wall1.transform.position.x = -15;
-        wall1.transform.position.y = 4.5;
-        wall1.mesh.scale.y = 30;
+        wall1.transform.position.y = 9.5;
+        wall1.mesh.scale.y = 20;
         wall1.mesh.scale.z = 30;
         wall1.mesh.material = tileMaterial
 
         const wall2 = renderer.addEntity("wall2");
         wall2.addController(CubeController);
         wall2.transform.position.z = -15;
-        wall2.transform.position.y = 4.5;
-        wall2.mesh.scale.y = 30;
+        wall2.transform.position.y = 9.5;
+        wall2.mesh.scale.y = 20;
         wall2.mesh.scale.x = 30;
         wall2.mesh.material = tileMaterial
 
         const wall3 = renderer.addEntity("wall3");
         wall3.addController(CubeController);
         wall3.transform.position.z = 15;
-        wall3.transform.position.y = 4.5;
-        wall3.mesh.scale.y = 30;
+        wall3.transform.position.y = 9.5;
+        wall3.mesh.scale.y = 20;
         wall3.mesh.scale.x = 30;
         wall3.mesh.material = tileMaterial
 
@@ -192,10 +224,10 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         return (
             <div className="page showroom">
                 <div ref={el => this.mount = el}></div>
-                <div className="catalog" style={(this.state.modelIsClicked) ? {"display": "block"} : null}>
+                <div className="catalog" style={(this.state.modelIsClicked) ? { "display": "block" } : null}>
                     {
                         this.state.modelIsClicked ?
-                            this.state.catalog.map((m, index) => 
+                            this.state.catalog.map((m, index) =>
                                 <div className="catalog-element" key={index}>
                                     <h1>{m.name}</h1>
                                     <div className="catalog-element-img" onClick={() => this.clickHandler(m._id)}>
@@ -206,8 +238,30 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
                     }
                 </div>
                 <DevInspector renderer={this.state.renderer} />
+                <div className="showroom-start-screen">
+                    <h1>Welcome To Our Virtual Showroom</h1>
+                    <div className="showroom-info">
+                        <p>Step Inside Our Virtual Showroom and Explore the Huge Variety Of Furniture That We Offer.</p>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
+                    </div>
+                    <div className="actions">
+                        <ProgressBar animated now={this.state.loadedModels * (100/this.state.defaultModels.length)} />
+                        <Button type="primary" id="enter-btn" disabled={this.state.isButtonDisabled} onClick={this.enterShowroom}>Enter</Button>
+                    </div>
+                </div>
             </div>
         )
+    }
+
+    enterShowroom = () => {
+        console.log("hi")
+        let div = document.getElementsByClassName("showroom-start-screen")[0];
+        div.classList.add("enter-showroom")
+        setTimeout(() => {
+            div.classList.add("remove-enter-screen")
+        }, 300)
     }
 
     clickHandler = async (id) => {
@@ -223,15 +277,6 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
     }
 
     async componentDidUpdate() {
-        if (this.state.modelIsClicked && this.state.loadCounter === 0) {
-            let modelAsRequest = await fetch(`${serverUrl}/type/models/${this.state.clickedModel.type}`)
 
-            let modelsAsJSON = await modelAsRequest.json()
-            let models = await modelsAsJSON.models;
-            this.setState({
-                catalog: models,
-                loadCounter: 1
-            })
-        }
     }
 }
