@@ -69,6 +69,10 @@ export default class CameraOrbitController extends Controller {
                     break;
                 }
 
+                if(hit.entity.name === "floor") {
+                    continue;
+                }
+
                 const material = hit.entity.mesh.material;
                 if(material instanceof MeshBasicMaterial) {
                     const newMaterial = material.clone();
