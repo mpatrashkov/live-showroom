@@ -3,6 +3,7 @@ import './login.scss';
 import { Form, Icon, Input, Button, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom'
 import withUserContext from '../../hocs/WithUserContext';
+import { serverUrl } from '../../config/config';
 
 interface LoginStateInterface {
     username: string,
@@ -41,7 +42,7 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
 
     onSubmit = async (e: any) => {
         e.preventDefault();
-        let data = await fetch('http://localhost:9999/auth/signin', {
+        let data = await fetch(`${serverUrl}/auth/signin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

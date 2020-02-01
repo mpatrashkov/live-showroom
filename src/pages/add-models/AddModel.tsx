@@ -181,7 +181,7 @@ class AddModel extends React.Component<AddModelProperties, AddModelState> {
     }
 
     async componentDidMount() {
-        let typesAsRequest = await fetch(`http://localhost:9999/type/all`)
+        let typesAsRequest = await fetch(`${serverUrl}/type/all`)
 
         let typesAsJSON = await typesAsRequest.json()
         let types = await typesAsJSON.types;
