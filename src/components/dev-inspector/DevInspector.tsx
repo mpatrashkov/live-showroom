@@ -10,7 +10,8 @@ interface DevInspectorProps {
 }
 
 interface DevInspectorState {
-    selectedEntities: string[]
+    selectedEntities: string[],
+    opened: boolean
 }
 
 class DevInspector extends Component<DevInspectorProps, DevInspectorState> {
@@ -23,7 +24,8 @@ class DevInspector extends Component<DevInspectorProps, DevInspectorState> {
         super(props);
 
         this.state = {
-            selectedEntities: []
+            selectedEntities: [],
+            opened: false
         }
 
         this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -51,6 +53,11 @@ class DevInspector extends Component<DevInspectorProps, DevInspectorState> {
         }
         if (event.key === "Delete") {
             this.deleteSelectedEntities();
+        }
+        if(event.key === "D") {
+            this.setState({
+                opened: !this.state.opened
+            })
         }
     }
 
@@ -99,16 +106,21 @@ class DevInspector extends Component<DevInspectorProps, DevInspectorState> {
         }
 
         return (
-            <div className="inspector-tree">
-                <div className="inspector-list">
-                    {this.entities.map((value, index) =>
-                        <div key={index} className={"inspector-tree-node" + (this.isEntitySelected(value) ? " selected" : "")} onClick={() => this.onEntityClick(value)}>{value.name}</div>
-                    )}
-                </div>
-                <div className="inspector-actions">
-                    <button onClick={() => this.toggleCamera()}>Toggle Camera</button>
-                </div>
-            </div>
+            <>
+                {this.state.opened ? 
+                    <div className="inspector-tree">
+                        <div className="inspector-list">
+                            {this.entities.map((value, index) =>
+                                <div key={index} className={"inspector-tree-node" + (this.isEntitySelected(value) ? " selected" : "")} onClick={() => this.onEntityClick(value)}>{value.name}</div>
+                            )}
+                        </div>
+                        <div className="inspector-actions">
+                            <button onClick={() => this.toggleCamera()}>Toggle Camera</button>
+                        </div>
+                    </div>
+                    : null
+                }
+            </>
         )
     }
 }

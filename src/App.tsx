@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'antd/dist/antd.css';
 import {
@@ -12,7 +11,6 @@ import Header from './components/header/Header';
 import Showroom from './pages/showroom/Showroom';
 import AddModel from './pages/add-models/AddModel';
 import AddMaterial from './pages/add-material/AddMaterial';
-import Footer from './components/footer/Footer'
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import { UserProvider } from './contexts/user-context';

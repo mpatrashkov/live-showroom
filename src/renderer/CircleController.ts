@@ -1,5 +1,5 @@
 import Controller from "./Controller";
-import { CircleGeometry, MeshBasicMaterial, Mesh } from "three";
+import { CircleGeometry, MeshBasicMaterial } from "three";
 
 export default class CircleController extends Controller {
     start() {

@@ -1,5 +1,5 @@
 import Controller from "./Controller"
-import { AmbientLight, PointLight, DirectionalLight } from "three"
+import { DirectionalLight } from "three"
 
 export default class LightController extends Controller {
     setup() {

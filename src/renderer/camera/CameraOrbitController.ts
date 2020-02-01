@@ -1,10 +1,11 @@
 import Controller from "../Controller"
 import Entity from "../Entity"
-import { Vector3, Matrix4, Quaternion, Camera, Spherical } from "three";
+import { Vector3, Matrix4, Spherical, MeshBasicMaterial } from "three";
 import Time from "../utils/Time";
 import MathHelpers from "../utils/MathHelpers";
-import Drag, { DeltaDrag } from "../utils/Drag";
+import { DeltaDrag } from "../utils/Drag";
 import CameraController from "./CameraController";
+import Raycast from "../utils/Raycast";
 
 export default class CameraOrbitController extends Controller {
     public target: Entity | null = null;
@@ -18,6 +19,11 @@ export default class CameraOrbitController extends Controller {
     private startAutoRotateTimeout: NodeJS.Timeout | null = null;
 
     private cameraController: CameraController | null = null;
+
+    private transparentEntities: {
+        entity: Entity,
+        prevMaterial: MeshBasicMaterial
+    }[] = [];
 
     start() {
         this.cameraController = this.entity.getController(CameraController);
@@ -52,7 +58,31 @@ export default class CameraOrbitController extends Controller {
             rotationMatrix.lookAt(Controller.mainCamera.position, this.target.transform.position, new Vector3(0, 1, 0));
             this.transform.rotation.setFromRotationMatrix(rotationMatrix);
             this.cameraController.currentPitchAngle = -(Math.PI / 2 - sph.phi);
-            // console.log(MathHelpers.toDeg(sph.phi), MathHelpers.toDeg(this.cameraController.currentPitchAngle));
+
+            for(let transparentEntity of this.transparentEntities) {
+                transparentEntity.entity.mesh.material = transparentEntity.prevMaterial.clone();
+            }
+
+            const hits = Raycast.getAll(pos.clone(), this.target.transform.position.clone().sub(pos));
+            for(let hit of hits) {
+                if(hit.entity === this.target) {
+                    break;
+                }
+
+                const material = hit.entity.mesh.material;
+                if(material instanceof MeshBasicMaterial) {
+                    const newMaterial = material.clone();
+                    newMaterial.transparent = true;
+                    newMaterial.opacity = 0.1;
+                    
+                    this.transparentEntities.push({
+                        entity: hit.entity,
+                        prevMaterial: material.clone()
+                    });
+
+                    hit.entity.mesh.material = newMaterial;
+                }
+            }
         }
     }
 

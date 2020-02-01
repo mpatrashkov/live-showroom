@@ -1,10 +1,7 @@
 import Controller from "./Controller";
-import { BoxGeometry, MeshBasicMaterial, Mesh, Euler, TextureLoader, EdgesGeometry, LineBasicMaterial, LineSegments } from "three";
-import Time from "./utils/Time";
-import CameraController from "./CameraController";
+import { BoxGeometry, MeshBasicMaterial, TextureLoader } from "three";
 
 export default class CubeController extends Controller {
-    private rotationSpeed = 0.1;
     public geometry: BoxGeometry | null = null;
 
     start() {

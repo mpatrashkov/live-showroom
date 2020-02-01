@@ -81,7 +81,7 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
                 <div className="login-info">
                     <h1>Unlock Many Amazing Features!</h1>
                     <div className="login-info-img">
-                        <img src="https://www.deltalight.com/frontend/files/projects/images/source/002921_REA11.jpg" />
+                        <img src="https://www.deltalight.com/frontend/files/projects/images/source/002921_REA11.jpg" alt="" />
                     </div>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam soluta inventore animi. Maiores voluptates nam aspernatur unde minima nobis sint, ea harum dignissimos, numquam perspiciatis architecto ipsum a. Officia, nostrum?</p>
                 </div>

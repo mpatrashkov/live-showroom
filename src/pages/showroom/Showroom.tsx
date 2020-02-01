@@ -5,16 +5,14 @@ import GameManager from '../../renderer/Renderer';
 import FloorController from '../../renderer/FloorController';
 import CameraController from '../../renderer/camera/CameraController';
 
-import { MeshBasicMaterial, Vector3, DirectionalLight, PointLight, CubeTextureLoader, RepeatWrapping, WebGLRenderer, Scene, PerspectiveCamera, BoxGeometry, Mesh } from 'three';
+import { MeshBasicMaterial, Vector3, DirectionalLight, PointLight, CubeTextureLoader, RepeatWrapping } from 'three';
 import ModelController from '../../renderer/ModelController';
 import OrbitableController from '../../renderer/OrbitableController';
 import LightController from '../../renderer/LightController';
 import DevInspector from '../../components/dev-inspector/DevInspector';
 import { TextureLoader } from 'three'
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
-import fs from 'fs'
 import EventSystem, { EventType } from '../../renderer/utils/EventSystem';
-import Entity from '../../renderer/Entity'; 
 import { serverUrl } from '../../config/config';
  
 interface ShowroomState {
@@ -30,10 +28,10 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
     mount: any;
     state = {
         renderer: null,
-        defaultModels: new Array(),
+        defaultModels: [],
         modelIsClicked: false,
         clickedModel: null,
-        catalog: new Array(),
+        catalog: [],
         loadCounter: 0
     };
 
@@ -76,7 +74,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
 
         EventSystem.on(EventType.OrbitableClicked, (name) => {
             for (let i = 0; i < this.state.defaultModels.length; i++) {
-                if (this.state.defaultModels[i].name == name) {
+                if (this.state.defaultModels[i].name === name) {
                     this.setState({ modelIsClicked: true, clickedModel: this.state.defaultModels[i] })
                     return
                 } else {
@@ -85,21 +83,25 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
             }
         })
 
+        EventSystem.on(EventType.OrbitableClosed, () => {
+            this.setState({ modelIsClicked: false, loadCounter: 0 })
+        });
+
         this.state.defaultModels.forEach((m) => {
             const cube = renderer.addEntity(m.name);
             cube.addController(OrbitableController).cameraController = cameraController;
             let cubeModelController = cube.addController(ModelController);
             cubeModelController.load(m.path, m.material)
-            if (m.type == "Sofa") {
+            if (m.type === "Sofa") {
                 cube.transform.position.z = -2;
                 cube.transform.position.x = 12;
-            } else if (m.type == "Dinner Table") {
+            } else if (m.type === "Dinner Table") {
                 cube.transform.position.z = -4.5;
                 cube.transform.position.x = -6;
-            } else if (m.type == "Garden Chair") {
+            } else if (m.type === "Garden Chair") {
                 cube.transform.position.x = 8;
                 cube.transform.position.z = -10;
-            } else if (m.type == "Armchair") {
+            } else if (m.type === "Armchair") {
                 cube.transform.position.x = 10;
                 cube.transform.position.z = 3;
             }
@@ -193,14 +195,14 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
                 <div className="catalog" style={(this.state.modelIsClicked) ? {"display": "block"} : null}>
                     {
                         this.state.modelIsClicked ?
-                            this.state.catalog.map(m => {
-                                return (<div className="catalog-element">
+                            this.state.catalog.map((m, index) => 
+                                <div className="catalog-element" key={index}>
                                     <h1>{m.name}</h1>
                                     <div className="catalog-element-img" onClick={() => this.clickHandler(m._id)}>
-                                        <img src={m.image} />
+                                        <img src={m.image} alt="" />
                                     </div>
-                                </div>)
-                            }) : null
+                                </div>
+                            ) : null
                     }
                 </div>
                 <DevInspector renderer={this.state.renderer} />
