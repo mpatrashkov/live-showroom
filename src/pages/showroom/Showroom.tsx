@@ -117,13 +117,15 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
             })
         }
 
-        
+
 
         this.state.defaultModels.forEach((m) => {
             const cube = renderer.addEntity(m.name);
             cube.addController(OrbitableController).cameraController = cameraController;
             let cubeModelController = cube.addController(ModelController);
-            cubeModelController.load(m.path, m.material)
+            if (m.material) {
+                cubeModelController.load(m.path, m.material)
+            }
             if (m.type === "Sofa") {
                 cube.transform.position.z = -2;
                 cube.transform.position.x = 12;
@@ -247,7 +249,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
                         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
                     </div>
                     <div className="actions">
-                        <ProgressBar animated now={this.state.loadedModels * (100/this.state.defaultModels.length)} />
+                        <ProgressBar animated now={this.state.loadedModels * (100 / this.state.defaultModels.length)} />
                         <Button type="primary" id="enter-btn" disabled={this.state.isButtonDisabled} onClick={this.enterShowroom}>Enter</Button>
                     </div>
                 </div>
