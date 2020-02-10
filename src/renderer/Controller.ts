@@ -53,6 +53,8 @@ abstract class Controller {
 
     onMouseDrag(deltaDrag: DeltaDrag) { }
 
+    onMouseScroll(delta: number) { }
+
     onUpdate(callback: UpdateCallback) {
         this.updateListeners.push(callback);
     }

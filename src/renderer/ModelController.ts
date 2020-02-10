@@ -2,6 +2,7 @@ import Controller from "./Controller"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import EventSystem, { EventType } from "./utils/EventSystem";
+import { Vector3, Box3 } from "three";
 
 export default class ModelController extends Controller {
     load(model: string, material: string) {
@@ -22,6 +23,11 @@ export default class ModelController extends Controller {
                 object.receiveShadow = true;
 
                 this.mesh.add(object);
+
+                const size = new Vector3()
+                new Box3().setFromObject(object).getSize(size)
+                console.log(size)
+
                 EventSystem.fire(EventType.ModelLoaded);
             })  
         })

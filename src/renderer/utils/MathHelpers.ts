@@ -1,3 +1,5 @@
+import { Vector3 } from "three";
+
 export default class MathHelpers {
     public static clamp(x: number, min: number, max: number) {
         if(x < min) {
@@ -20,5 +22,13 @@ export default class MathHelpers {
 
     public static normalizeAngleRad(angle: number) {
         return angle - 2 * Math.PI * Math.floor((angle + Math.PI) / 2 * Math.PI);
+    }
+
+    public static roundVector(vector: Vector3) {
+        return new Vector3(
+            Math.round(vector.x),
+            Math.round(vector.y),
+            Math.round(vector.z),
+        )
     }
 }

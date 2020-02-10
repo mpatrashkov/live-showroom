@@ -17,7 +17,10 @@ export default class Entity {
     addController<T extends Controller>(type: new (entity: Entity) => T): T {
         const controller = new type(this);
         this.controllers.push(controller);
-        controller.start();
+
+        Controller.manager.nextFrame(() => {
+            controller.start()
+        })
 
         return controller;
     }

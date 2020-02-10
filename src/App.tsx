@@ -14,6 +14,7 @@ import AddMaterial from './pages/add-material/AddMaterial';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import { UserProvider } from './contexts/user-context';
+import Playground from './pages/playground/Playground';
 
 interface AppState {
     user: any
@@ -52,6 +53,9 @@ class App extends React.Component<{}, AppState> {
                         </Route>
                         <Route path="/showroom" exact>
                             <Showroom />
+                        </Route>
+                        <Route path="/playground" exact>
+                            <Playground />
                         </Route>
                         <Route path="/add/model" exact>
                             <AddModel />

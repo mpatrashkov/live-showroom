@@ -3,13 +3,15 @@ type EventListener<T> = (data: T) => void
 export enum EventType {
     OrbitableClicked,
     OrbitableClosed,
-    ModelLoaded
+    ModelLoaded,
+    EditModeChange
 }
 
 type EventDataType = {
     [EventType.OrbitableClicked]: string,
     [EventType.OrbitableClosed]: never,
-    [EventType.ModelLoaded]: never
+    [EventType.ModelLoaded]: never,
+    [EventType.EditModeChange]: string
 }
 
 export default class EventSystem {

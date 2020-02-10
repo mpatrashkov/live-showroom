@@ -80,7 +80,6 @@ export default class CameraController extends Controller {
         }
 
         EventSystem.fire(EventType.OrbitableClicked, target.name);
-        console.log(1);
         this.isOrbiting = true;
 
         this.prepareCameraForOrbiting(target).then(() => {

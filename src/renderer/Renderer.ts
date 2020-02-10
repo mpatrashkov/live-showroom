@@ -21,7 +21,7 @@ export default class GameManager {
 
     public entities: Entity[];
 
-    public q = new Quaternion()
+    private nextFrameListeners = [];
 
     constructor(mount: any) {
         this.entities = [];
@@ -71,6 +71,15 @@ export default class GameManager {
                 })
             })
         })
+        document.addEventListener('wheel', (event: WheelEvent) => {
+            this.entities.forEach(entity => {
+                entity.controllers.forEach(controller => {
+                    if(controller.enabled) {
+                        controller.onMouseScroll(event.deltaY)
+                    }
+                })
+            })
+        });
 
         const composer = new EffectComposer(this.renderer)
         const renderPass = new RenderPass(this.scene, this.activeCamera);
@@ -92,6 +101,8 @@ export default class GameManager {
             prevTime = now;
             
             this.outlinePass.selectedObjects = Outline.getSelectedObjects();
+
+            this.callNextFrameListeners()
 
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
@@ -170,5 +181,17 @@ export default class GameManager {
 
     getDOMElement() {
         return this.renderer.domElement;
+    }
+
+    nextFrame(callback) {
+        this.nextFrameListeners.push(callback)
+    }
+
+    callNextFrameListeners() {
+        for(let listener of this.nextFrameListeners) {
+            listener()
+        }
+
+        this.nextFrameListeners = []
     }
 }
