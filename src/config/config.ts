@@ -1,1 +1,1 @@
-export const serverUrl = "http://localhost:9999";
+export const serverUrl = "http://liveshowroomserver.azurewebsites.net/";
