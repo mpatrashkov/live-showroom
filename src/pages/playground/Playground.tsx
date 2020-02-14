@@ -14,15 +14,40 @@ import "./playground.scss"
 import { Radio } from "antd";
 import EventSystem, { EventType } from "../../renderer/utils/EventSystem";
 import { RadioChangeEvent } from "antd/lib/radio";
+import { serverUrl } from "../../config/config";
+import withUserContext from "../../hocs/WithUserContext";
+import OrbitableController from "../../renderer/OrbitableController";
+import ModelController from "../../renderer/ModelController";
+import { Redirect } from "react-router-dom";
 
-class Playground extends React.Component {
+interface PlaygroundProperties {
+    updateUser: Function,
+    userId: string,
+    username: string,
+    isAdmin: boolean,
+    isLoggedIn: boolean
+}
+
+interface PlaygroundState {
+    editMode: boolean,
+    inventory: Array<any>
+}
+
+class Playground extends React.Component<PlaygroundProperties, PlaygroundState> {
     mount: HTMLDivElement
 
     state = {
-        editMode: false
+        editMode: false,
+        inventory: []
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let modelsAsRequest = await fetch(`${serverUrl}/model/inventory/get/${this.props.userId}`)
+        let modelsAsJSON = await modelsAsRequest.json();
+        let models = await modelsAsJSON.inventory;
+
+        this.setState({ inventory: models })
+
         const renderer = new GameManager(this.mount);
         renderer.start();
 
@@ -39,20 +64,30 @@ class Playground extends React.Component {
         grid.addController(GridController)
         grid.mesh.visible = false
 
-        const cube = renderer.addEntity("cube");
-        cube.addController(TestCubeController).transform.position = new Vector3(0, 1, -5);
-        const editableController = cube.addController(EditableController)
-        editableController.ground = ground
-        editableController.grid = grid
+        if (models.length > 0 && !renderer.findEntityByName(models[0].name)) {
+            const cube = renderer.addEntity(models[0].name);
+            const editableController = cube.addController(EditableController)
+            let cubeModelController = cube.addController(ModelController);
+            cubeModelController.load(models[0].path, models[0].materials[0])
+            editableController.ground = ground
+            editableController.grid = grid
+        }
 
         EventSystem.on(EventType.EditModeChange, () => {
             this.setState({
                 editMode: !this.state.editMode
             })
         })
+
     }
 
     render() {
+        if (!this.props.isLoggedIn) {
+            return (
+                <Redirect to="/" />
+            )
+        }
+        
         return (
             <div className="page playground">
                 <div ref={el => this.mount = el}></div>
@@ -61,6 +96,18 @@ class Playground extends React.Component {
                         <Radio.Button value="move">Move</Radio.Button>
                         <Radio.Button value="rotate">Rotate</Radio.Button>
                     </Radio.Group>
+                </div>
+                <div className="playground-inventory" style={(this.state.inventory.length > 0) ? { "display": "block" } : null}>
+                    {
+                        this.state.inventory.map((m) => (
+                            <div className="playground-inventory-item">
+                                <h3>{m.name}</h3>
+                                <div className="playground-inventory-item-img">
+                                    <img src={m.image} />
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         )
@@ -71,4 +118,4 @@ class Playground extends React.Component {
     }
 }
 
-export default Playground
+export default withUserContext(Playground)

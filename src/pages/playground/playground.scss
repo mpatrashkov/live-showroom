@@ -1,6 +1,57 @@
-.playground-toolbar {
-    position: absolute;
-    top: 0;
-    background: white;
-    padding: 12px;
+.playground {
+    &-toolbar {
+        position: absolute;
+        top: 0;
+        background: white;
+        padding: 12px;
+    }
+
+    &-inventory {
+        position: absolute;
+        top: 0; right: 0;
+        background: #FFF;
+        overflow-y:auto;
+        max-height: 30rem;
+        width: 20rem;
+        padding: 1rem;
+        display: none;
+
+        &-item {
+            &:not(:first-child) {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #000;
+            };
+    
+            h3 {
+                text-align: center;
+            }
+
+            &-img {
+                position: relative;
+                overflow: hidden;
+                transition: transform 0.3s ease;
+    
+                &:hover {
+                    transform: scale(1.1);
+                }
+    
+                &:before {
+                    display: block;
+                    content: '';
+                    padding-top: 56.25%;
+                }
+    
+                img {
+                    display: block;
+                    position: absolute;
+                    top: 50%; left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 100%;
+                    height: auto;
+                }
+            }
+        }
+    }
 }
+

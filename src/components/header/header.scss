@@ -6,6 +6,15 @@
     border-bottom: 1.5px solid #e8e8e8;
     box-shadow: 0 3px 8px #f0f1f2;
     
+    .site-logo {
+        display: flex;
+        align-items: center;
+
+        i {
+            margin-right: 0.5rem;
+        }
+    }
+
     .site-nav {
         margin-left: auto;
         display: flex;

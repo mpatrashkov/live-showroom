@@ -15,7 +15,8 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import EventSystem, { EventType } from '../../renderer/utils/EventSystem';
 import { serverUrl } from '../../config/config';
 import { ProgressBar } from 'react-bootstrap'
-import { Button } from 'antd'
+import { Button, Popover } from 'antd'
+import withUserContext from '../../hocs/WithUserContext';
 
 interface ShowroomState {
     renderer: GameManager | null,
@@ -25,10 +26,19 @@ interface ShowroomState {
     catalog: Array<any>,
     loadCounter: number,
     loadedModels: number,
-    isButtonDisabled: boolean
+    isButtonDisabled: boolean,
+    visible: string
 }
 
-export default class Showroom extends React.Component<{}, ShowroomState> {
+interface ShowroomProperties {
+    updateUser: Function,
+    userId: string,
+    username: string,
+    isAdmin: boolean,
+    isLoggedIn: boolean
+}
+
+class Showroom extends React.Component<ShowroomProperties, ShowroomState> {
     mount: any;
     state = {
         renderer: null,
@@ -38,7 +48,8 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         catalog: [],
         loadCounter: 0,
         loadedModels: 0,
-        isButtonDisabled: true
+        isButtonDisabled: true,
+        visible: ''
     };
 
     async componentDidMount() {
@@ -226,7 +237,7 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         return (
             <div className="page showroom">
                 <div ref={el => this.mount = el}></div>
-                <div className="catalog" style={(this.state.modelIsClicked) ? { "display": "block" } : null}>
+                <div className="catalog" style={(this.state.modelIsClicked) ? { "display": "block" } : null} onScroll={() => {this.setState({visible: ''})}}>
                     {
                         this.state.modelIsClicked ?
                             this.state.catalog.map((m, index) =>
@@ -235,6 +246,19 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
                                     <div className="catalog-element-img" onClick={() => this.clickHandler(m._id)}>
                                         <img src={m.image} alt="" />
                                     </div>
+                                    {
+                                        this.props.isLoggedIn ? (
+                                            <div className="catalog-element-buttons">
+                                                <button className="btn btn-primary" onClick={() => this.clickHandler(m._id)}>Show</button>
+                                                <Popover title="Congratulations"
+                                                    visible={this.state.visible === m._id}
+                                                    placement="rightBottom"
+                                                    content="Model Added to Inventory Successfully!">
+                                                    <button className="btn btn-success" onClick={() => this.addToInventory(m._id)}>Add to Inventory</button>
+                                                </Popover>
+                                            </div>
+                                        ) : null
+                                    }
                                 </div>
                             ) : null
                     }
@@ -278,7 +302,28 @@ export default class Showroom extends React.Component<{}, ShowroomState> {
         modelController.load(model.path, model.materials[0].path)
     }
 
+    addToInventory = async (id) => {
+        console.log(id)
+        let modelAsRequest = await fetch(`${serverUrl}/model/inventory/add/${this.props.userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({modelId: id})
+        })
+        let result = await modelAsRequest.json();
+        if(result.message) {
+            this.setState({ visible: id }, () => {
+                setTimeout(() => {
+                    this.setState({ visible: '' })
+                }, 3000)
+            })
+        }
+    }
+
     async componentDidUpdate() {
 
     }
 }
+
+export default withUserContext(Showroom)

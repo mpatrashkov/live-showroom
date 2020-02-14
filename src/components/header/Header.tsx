@@ -16,7 +16,7 @@ class Header extends React.Component<HeaderProperties> {
     render() {
         return (
             <div className="header">
-                <div className="site-logo"><Icon type="solution" /> LIVE SHOWROOM</div>
+                <div className="site-logo"><Icon type="solution" /> <span>LIVE SHOWROOM</span></div>
                 <Menu className="site-nav" mode="horizontal">
                     {
                         this.props.isLoggedIn ? (
@@ -31,9 +31,14 @@ class Header extends React.Component<HeaderProperties> {
                     <Menu.Item>
                         <Link to="/showroom">Showroom</Link>
                     </Menu.Item>
-                    <Menu.Item>
-                        <Link to="/playground">Playground</Link>
-                    </Menu.Item>
+                    {
+                        this.props.isLoggedIn ? (
+                            <Menu.Item>
+                                <Link to="/playground">Playground</Link>
+                            </Menu.Item>
+                        ) : null
+                    }
+
                     <Menu.Item>
                         <Link to="/shop">Shop</Link>
                     </Menu.Item>
