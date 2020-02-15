@@ -1,7 +1,7 @@
 import React from "react"
 import GameManager from "../../renderer/Renderer";
 import SunController from "../../renderer/SunController";
-import { Vector3 } from "three";
+import { Vector3, Box3 } from "three";
 import GroundController from "../../renderer/GroundController";
 import TestCubeController from "../../renderer/TestCubeController";
 import DesignCameraController from "../../renderer/design-camera/DesignCameraController";
@@ -30,7 +30,10 @@ interface PlaygroundProperties {
 
 interface PlaygroundState {
     editMode: boolean,
-    inventory: Array<any>
+    inventory: Array<any>,
+    renderer: GameManager,
+    grid: any,
+    ground: any
 }
 
 class Playground extends React.Component<PlaygroundProperties, PlaygroundState> {
@@ -38,13 +41,17 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
 
     state = {
         editMode: false,
-        inventory: []
+        inventory: [],
+        renderer: null,
+        grid: null,
+        ground: null
     }
 
     async componentDidMount() {
         let modelsAsRequest = await fetch(`${serverUrl}/model/inventory/get/${this.props.userId}`)
         let modelsAsJSON = await modelsAsRequest.json();
         let models = await modelsAsJSON.inventory;
+        console.log(models)
 
         this.setState({ inventory: models })
 
@@ -66,11 +73,14 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
 
         if (models.length > 0 && !renderer.findEntityByName(models[0].name)) {
             const cube = renderer.addEntity(models[0].name);
-            const editableController = cube.addController(EditableController)
             let cubeModelController = cube.addController(ModelController);
-            cubeModelController.load(models[0].path, models[0].materials[0])
-            editableController.ground = ground
-            editableController.grid = grid
+            cubeModelController.load(models[0].path, models[0].material)
+            EventSystem.on(EventType.ModelLoaded, () => {
+                const editableController = cube.addController(EditableController)
+                editableController.ground = ground
+                editableController.grid = grid
+            })
+
         }
 
         EventSystem.on(EventType.EditModeChange, () => {
@@ -78,6 +88,8 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                 editMode: !this.state.editMode
             })
         })
+
+        this.setState({renderer, grid,ground})
 
     }
 
@@ -87,7 +99,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                 <Redirect to="/" />
             )
         }
-        
+
         return (
             <div className="page playground">
                 <div ref={el => this.mount = el}></div>
@@ -102,7 +114,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                         this.state.inventory.map((m) => (
                             <div className="playground-inventory-item">
                                 <h3>{m.name}</h3>
-                                <div className="playground-inventory-item-img">
+                                <div className="playground-inventory-item-img" onClick={() => this.onAddModel(m)}>
                                     <img src={m.image} />
                                 </div>
                             </div>
@@ -115,6 +127,22 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
 
     onEditModeChange = (e: RadioChangeEvent) => {
         EventSystem.fire(EventType.EditModeChange, e.target.value)
+    }
+
+    onAddModel = (model: any) => {
+        const object = this.state.renderer.addEntity(model.name)
+        
+        let objectModelController = object.addController(ModelController)
+        objectModelController.load(model.path, model.material)
+        EventSystem.on(EventType.ModelLoaded, (m) => {
+            if(m === model.path) {
+                const editableController = object.addController(EditableController)
+                editableController.ground = this.state.ground
+                editableController.grid = this.state.grid
+                object.transform.position.x = -12;
+                object.transform.position.z = -14;
+            }
+        })
     }
 }
 

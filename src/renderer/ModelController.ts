@@ -24,11 +24,16 @@ export default class ModelController extends Controller {
 
                 this.mesh.add(object);
 
-                const size = new Vector3()
-                new Box3().setFromObject(object).getSize(size)
-                console.log(size)
+                // const size = new Vector3()
+                // new Box3().setFromObject(object).getSize(size)
+                // this.mesh.geometry.computeBoundingBox()
+                // console.log(this.mesh,{
+                //     x: Math.ceil(size.x),
+                //     y: Math.ceil(size.y),
+                //     z: Math.ceil(size.z),
+                // })
 
-                EventSystem.fire(EventType.ModelLoaded);
+                EventSystem.fire(EventType.ModelLoaded, model);
             })  
         })
     }

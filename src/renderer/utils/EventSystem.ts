@@ -10,7 +10,7 @@ export enum EventType {
 type EventDataType = {
     [EventType.OrbitableClicked]: string,
     [EventType.OrbitableClosed]: never,
-    [EventType.ModelLoaded]: never,
+    [EventType.ModelLoaded]: string,
     [EventType.EditModeChange]: string
 }
 
