@@ -13,10 +13,9 @@ export default class MovableController extends Controller {
         const hit = Raycast.fromCamera(Input.mousePosition, [this.ground]);
         if(hit) {
             const size = new Vector3()
-            new Box3().setFromObject(this.mesh).getSize(size)
+            new Box3().setFromObject(this.mesh.children[0]).getSize(size)
             
             const offset = new Vector3((size.x - this.gridSize) / 2, size.y / 2, (size.z - this.gridSize) / 2)
-
             this.transform.position = MathHelpers.roundVector(hit.point.divideScalar(this.gridSize))
                                                  .multiplyScalar(this.gridSize)
                                                  .add(offset)
