@@ -64,6 +64,8 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
         grid.addController(GridController)
         grid.mesh.visible = false
 
+        console.log(models)
+
         if (models.length > 0 && !renderer.findEntityByName(models[0].name)) {
             const cube = renderer.addEntity(models[0].name);
             const editableController = cube.addController(EditableController)
@@ -103,7 +105,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                             <div className="playground-inventory-item">
                                 <h3>{m.name}</h3>
                                 <div className="playground-inventory-item-img">
-                                    <img src={m.image} />
+                                    <img src={m.image} alt="" />
                                 </div>
                             </div>
                         ))
