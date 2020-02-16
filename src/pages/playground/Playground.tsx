@@ -19,6 +19,8 @@ import withUserContext from "../../hocs/WithUserContext";
 import OrbitableController from "../../renderer/OrbitableController";
 import ModelController from "../../renderer/ModelController";
 import { Redirect } from "react-router-dom";
+import WallController from "../../renderer/WallController";
+import RoomController from "../../renderer/RoomController";
 
 interface PlaygroundProperties {
     updateUser: Function,
@@ -32,7 +34,7 @@ interface PlaygroundState {
     editMode: boolean,
     inventory: Array<any>,
     renderer: GameManager,
-    grid: any,
+    gridEntity: any,
     ground: any
 }
 
@@ -43,7 +45,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
         editMode: false,
         inventory: [],
         renderer: null,
-        grid: null,
+        gridEntity: null,
         ground: null
     }
 
@@ -67,21 +69,28 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
         const ground = renderer.addEntity("ground");
         ground.addController(GroundController);
 
-        const grid = renderer.addEntity("grid")
-        grid.addController(GridController)
-        grid.mesh.visible = false
+        const gridEntity = renderer.addEntity("grid")
+        gridEntity.addController(GridController)
+        gridEntity.mesh.visible = false
 
-        console.log(models)
+        // const cube = renderer.addEntity("cube");
+        // cube.addController(TestCubeController)
+        // let editableController = cube.addController(EditableController)
+        // editableController.ground = ground
+        // editableController.gridEntity = gridEntity
+
+        const room = renderer.addEntity("room")
+        const roomController = room.addController(RoomController)
+        roomController.gridEntity = gridEntity
 
         if (models.length > 0 && !renderer.findEntityByName(models[0].name)) {
             const cube = renderer.addEntity(models[0].name);
             let cubeModelController = cube.addController(ModelController);
-            cubeModelController.load(models[0].path, models[0].material)
-            EventSystem.on(EventType.ModelLoaded, () => {
-                const editableController = cube.addController(EditableController)
-                editableController.ground = ground
-                editableController.grid = grid
-            })
+            await cubeModelController.load(models[0].path, models[0].material)
+            
+            const editableController = cube.addController(EditableController)
+            editableController.ground = ground
+            editableController.gridEntity = gridEntity
 
         }
 
@@ -91,7 +100,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
             })
         })
 
-        this.setState({renderer, grid,ground})
+        this.setState({renderer, gridEntity, ground})
 
     }
 
@@ -131,20 +140,17 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
         EventSystem.fire(EventType.EditModeChange, e.target.value)
     }
 
-    onAddModel = (model: any) => {
-        const object = this.state.renderer.addEntity(model.name)
+    onAddModel = async (model: any) => {
+        const object = Controller.manager.addEntity(model.name)
         
         let objectModelController = object.addController(ModelController)
-        objectModelController.load(model.path, model.material)
-        EventSystem.on(EventType.ModelLoaded, (m) => {
-            if(m === model.path) {
-                const editableController = object.addController(EditableController)
-                editableController.ground = this.state.ground
-                editableController.grid = this.state.grid
-                object.transform.position.x = -12;
-                object.transform.position.z = -14;
-            }
-        })
+        let m = await objectModelController.load(model.path, model.material)
+      
+        if(m === model.path) {
+            const editableController = object.addController(EditableController)
+            editableController.ground = this.state.ground
+            editableController.gridEntity = this.state.gridEntity
+        }
     }
 }
 

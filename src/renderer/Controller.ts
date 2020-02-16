@@ -40,24 +40,23 @@ abstract class Controller {
     }
 
     start() { }
-
     update() { }
+    
+    onUpdate(callback: UpdateCallback) {
+        this.updateListeners.push(callback);
+    }
 
     destroy() { }
 
     onClick(point?: Vector3) { }
-
+    onClickOnce(point?: Vector3) { }
     onMouseDown(point?: Vector3) { }
-
+    onMouseDownOnce(point?: Vector3) { }
     onMouseUp(point?: Vector3) { }
-
+    onMouseUpOnce(point?: Vector3) { }
     onMouseDrag(deltaDrag: DeltaDrag) { }
-
     onMouseScroll(delta: number) { }
-
-    onUpdate(callback: UpdateCallback) {
-        this.updateListeners.push(callback);
-    }
+    onMouseMove(x: number, y: number) { }
 }
 
 export default Controller;

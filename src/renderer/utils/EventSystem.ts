@@ -4,14 +4,16 @@ export enum EventType {
     OrbitableClicked,
     OrbitableClosed,
     ModelLoaded,
-    EditModeChange
+    EditModeChange,
+    GroundClicked
 }
 
 type EventDataType = {
     [EventType.OrbitableClicked]: string,
     [EventType.OrbitableClosed]: never,
     [EventType.ModelLoaded]: string,
-    [EventType.EditModeChange]: string
+    [EventType.EditModeChange]: string,
+    [EventType.GroundClicked]: never
 }
 
 export default class EventSystem {

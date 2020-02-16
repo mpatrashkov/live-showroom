@@ -13,12 +13,18 @@ export default class Drag {
         x: 0,
         y: 0
     };
+    private static previousValidMousePosition = {
+        x: 0,
+        y: 0
+    };
 
     private static listeners: DragListener[] = [];
 
     public static isDragging = false;
 
     private static hasDragged = false;
+
+    private static dragThreshold = 15
 
     public static startDragCheck() {
         Drag.hasDragged = false;
@@ -35,11 +41,31 @@ export default class Drag {
         });
         renderer.getDOMElement().addEventListener('mousemove', (e) => {
             if(this.isDragging) {
+                const thresholdDelta = {
+                    x: e.offsetX - this.previousValidMousePosition.x,
+                    y: e.offsetY - this.previousValidMousePosition.y
+                };
+
+                if(!Drag.hasDragged && Math.abs(thresholdDelta.x) < Drag.dragThreshold && Math.abs(thresholdDelta.y)  < Drag.dragThreshold) {
+                    this.previousMousePosition = {
+                        x: e.offsetX,
+                        y: e.offsetY
+                    }
+
+                    return
+                }
+
                 Drag.hasDragged = true;
+
+                this.previousValidMousePosition = {
+                    x: e.offsetX,
+                    y: e.offsetY
+                };
+                
                 this.deltaDrag = {
                     x: e.offsetX - this.previousMousePosition.x,
                     y: e.offsetY - this.previousMousePosition.y
-                };
+                }
 
                 this.previousMousePosition = {
                     x: e.offsetX,
@@ -67,6 +93,11 @@ export default class Drag {
         }
 
         this.previousMousePosition = {
+            x: e.offsetX,
+            y: e.offsetY
+        }
+
+        this.previousValidMousePosition = {
             x: e.offsetX,
             y: e.offsetY
         }

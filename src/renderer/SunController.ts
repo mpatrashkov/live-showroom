@@ -6,7 +6,7 @@ export default class SunController extends Controller {
         const directionalLight = new DirectionalLight(0xffffff, 1);
         // directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
         directionalLight.color.setHSL(0.1, 1, 0.95);
-        directionalLight.position.set(-1, 1.75, 1);
+        directionalLight.position.set(-0.25, 1.75, 0.25);
         directionalLight.position.multiplyScalar(30);
 
         directionalLight.castShadow = true;

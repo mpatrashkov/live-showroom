@@ -62,6 +62,6 @@ export default class DesignCameraOrbitingController extends Controller {
     }
 
     onMouseScroll(delta: number) {
-        this.rotateAround(0, 0, delta);
+        this.rotateAround(0, 0, 3 * delta);
     }
 }

@@ -71,11 +71,20 @@ export default class GameManager {
                 })
             })
         })
-        document.addEventListener('wheel', (event: WheelEvent) => {
+        this.getDOMElement().addEventListener('wheel', (event: WheelEvent) => {
             this.entities.forEach(entity => {
                 entity.controllers.forEach(controller => {
                     if(controller.enabled) {
-                        controller.onMouseScroll(event.deltaY)
+                        controller.onMouseScroll(Math.sign(event.deltaY))
+                    }
+                })
+            })
+        });
+        this.getDOMElement().addEventListener('mousemove', (event) => {
+            this.entities.forEach(entity => {
+                entity.controllers.forEach(controller => {
+                    if(controller.enabled) {
+                        controller.onMouseMove(event.offsetX, event.offsetY)
                     }
                 })
             })
@@ -124,16 +133,28 @@ export default class GameManager {
             this.handleMouseAction(controller => controller.onClick);
         }, true);
 
+        Controller.renderer.domElement.addEventListener("click", (event) => {
+            this.handleMouseAction(controller => controller.onClickOnce, true);
+        }, true);
+
         Controller.renderer.domElement.addEventListener("mousedown", (event) => {
             this.handleMouseAction(controller => controller.onMouseDown);
+        }, true);
+
+        Controller.renderer.domElement.addEventListener("mousedown", (event) => {
+            this.handleMouseAction(controller => controller.onMouseDownOnce, true);
         }, true);
 
         Controller.renderer.domElement.addEventListener("mouseup", (event) => {
             this.handleMouseAction(controller => controller.onMouseUp);
         }, true);
+
+        Controller.renderer.domElement.addEventListener("mouseup", (event) => {
+            this.handleMouseAction(controller => controller.onMouseUpOnce, true);
+        }, true);
     }
 
-    handleMouseAction(callbackFunction: (controller: Controller) => Function) {
+    handleMouseAction(callbackFunction: (controller: Controller) => Function, once?: boolean) {
         const raycaster = new Raycaster();
 
         const mouse = Input.mousePosition;
@@ -144,17 +165,31 @@ export default class GameManager {
             const clickEvent = (object: Object3D) => {
                 const hitEntity = this.findEntityByName(object.name);
                 hitEntity?.controllers.forEach(controller => callbackFunction(controller).call(controller, intersect.point))
+                if(hitEntity && once) {
+                    return true
+                }
                 if(object.parent) {
-                    clickEvent(object.parent);
+                    return clickEvent(object.parent);
                 }
             }
 
-            clickEvent(intersect.object);
+            if(clickEvent(intersect.object)) {
+                break;
+            }
         }
     }
 
     addEntity(name: string): Entity {
-        const entity = new Entity(name);
+        let i = 0
+        let currName = name
+
+        // eslint-disable-next-line no-loop-func
+        while(this.entities.find(entity => entity.name === currName)) {
+            i++
+            currName = `${name}(${i})`;
+        }
+
+        const entity = new Entity(currName);
         this.entities.push(entity);
         this.scene.add(entity.mesh);
 
