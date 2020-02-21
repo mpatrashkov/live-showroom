@@ -28,26 +28,33 @@ export default class ModelController extends Controller {
                         child.receiveShadow = true;
                     })
 
-                    const pivot = new Group()
-                    pivot.castShadow = true
-                    pivot.receiveShadow = true
-                    pivot.add(object)
-                    
-                    Controller.manager.nextFrame(() => {
-                        const size = new Vector3()
-                        const box = new Box3().setFromObject(object.children[0])
-                        box.getSize(size)
-                        
-                        const center = box.min.clone().sub(box.max).divideScalar(2).add(box.max)
-                        console.log(center.clone())
-                        center.setY(0)
-                        object.position.copy(center.multiplyScalar(-1))
-                    })
-                    
-                    
-                    this.mesh.add(pivot);
-                    this.mesh.add(new BoxHelper(this.mesh, new Color(0x00ffff)))
-                    
+                    if (window.location.pathname === '/playground') {
+
+
+
+                        const pivot = new Group()
+                        pivot.castShadow = true
+                        pivot.receiveShadow = true
+                        pivot.add(object)
+
+                        Controller.manager.nextFrame(() => {
+                            const size = new Vector3()
+                            const box = new Box3().setFromObject(object.children[0])
+                            box.getSize(size)
+
+                            const center = box.min.clone().sub(box.max).divideScalar(2).add(box.max)
+                            //console.log(center.clone())
+                            center.setY(0)
+                            object.position.copy(center.multiplyScalar(-1))
+                        })
+
+
+                        this.mesh.add(pivot);
+                        this.mesh.add(new BoxHelper(this.mesh, new Color(0x00ffff)))
+                    } else {
+                        this.mesh.add(object)
+                    }
+
                     // this.mesh.add(object);
 
                     // console.log(pivot)
@@ -63,7 +70,7 @@ export default class ModelController extends Controller {
 
                     EventSystem.fire(EventType.ModelLoaded, model);
                     resolve(model)
-                })  
+                })
             })
         })
     }

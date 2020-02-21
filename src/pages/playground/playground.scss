@@ -6,6 +6,17 @@
         padding: 12px;
     }
 
+    &-save {
+        position: absolute;
+        top: 0; left: 161.913px;
+        height: 56px;
+        background: #FFF;
+
+        .ant-btn {
+            margin: 12px;
+        }
+    }
+
     &-inventory {
         position: absolute;
         top: 0; right: 0;

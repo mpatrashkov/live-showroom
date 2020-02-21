@@ -17,7 +17,7 @@ export default class MovableController extends Controller {
     private dev = false
 
     tileCount = new Vector2()
-    gridPosition = new Vector2()
+    gridPosition: Vector2 
 
     private editableController: EditableController
 
@@ -38,14 +38,14 @@ export default class MovableController extends Controller {
             Math.ceil(size.z / this.grid.tileSize),
         )
         
-        this.gridPosition = this.grid.getFreeSpot(this.tileCount)
+        this.gridPosition = this.gridPosition || this.grid.getFreeSpot(this.tileCount)
         if(this.gridPosition === null) {
             this.destroy()
             return
         }
 
         console.log(this.gridPosition)
-        console.log(this.tileCount)
+        //console.log(this.tileCount)
 
         this.grid.setArea(this.gridPosition, this.tileCount, 100);
         this.transform.position = this.grid.gridToWorldPosition(this.gridPosition)

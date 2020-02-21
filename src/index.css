@@ -18,7 +18,7 @@ body {
     flex-grow: 1;
 }
 
-.showroom, .playground {
+.showroom, .playground, .user-room{
     margin: 0;
     padding: 0;
     height: calc(100vh - 50px);
@@ -26,7 +26,7 @@ body {
     position: relative;
 }
 
-.showroom div:first-child, .playground div:first-child {
+.showroom div:first-child, .playground div:first-child, .user-room div:first-child{
     height: 100%;
 }
 

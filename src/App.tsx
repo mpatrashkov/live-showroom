@@ -15,6 +15,7 @@ import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import { UserProvider } from './contexts/user-context';
 import Playground from './pages/playground/Playground';
+import UserRoom from './pages/user-room/userRoom'
 
 interface AppState {
     user: any
@@ -68,6 +69,9 @@ class App extends React.Component<{}, AppState> {
                         </Route>
                         <Route path="/signup" exact>
                             <Register />
+                        </Route>
+                        <Route path="/user/room" exact>
+                            <UserRoom />
                         </Route>
                     </Switch>
                 </div>

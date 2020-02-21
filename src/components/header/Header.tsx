@@ -29,19 +29,24 @@ class Header extends React.Component<HeaderProperties> {
                         <Link to="/">Home</Link>
                     </Menu.Item>
                     <Menu.Item>
-                        <Link to="/showroom">Showroom</Link>
+                        <a href="/showroom">Showroom</a>
                     </Menu.Item>
                     {
                         this.props.isLoggedIn ? (
                             <Menu.Item>
-                                <Link to="/playground">Playground</Link>
+                                <a href="/playground">Playground</a>
                             </Menu.Item>
                         ) : null
                     }
 
-                    <Menu.Item>
-                        <Link to="/shop">Shop</Link>
-                    </Menu.Item>
+                    {
+                        this.props.isLoggedIn ? (
+                            <Menu.Item>
+                                <a href="/user/room">My Room</a>
+                            </Menu.Item>
+                        ) : null
+                    }
+
                     {
                         this.props.isAdmin === "true" ? (
                             <Menu.Item>
