@@ -1,19 +1,39 @@
 import Controller from "../Controller";
-import { DeltaDrag } from "../utils/Drag";
-import { Euler, Vector3 } from "three";
+import { Vector3 } from "three";
+import MovableController from "./MovableController";
+import EditableController from "./EditableController";
 
 export default class RotatingController extends Controller {
     rotateThreshold = 50
     prevPostion = 0
+    
+    movableController: MovableController
+    editableController: EditableController
 
-    onMouseMove(x, y) {
-        if(x - this.prevPostion >= this.rotateThreshold) {
-            console.log(1)
-            let newRotation = this.transform.eulerRotation.toVector3()
-            newRotation.add(new Vector3(0, -Math.PI / 2, 0))
-            this.transform.eulerRotation = new Euler().setFromVector3(newRotation)
-            this.prevPostion = x
-        }
+    ground
+    grid
+    gridOffset
 
+    start() {
+        this.movableController = this.entity.getController(MovableController)
+        this.editableController = this.entity.getController(EditableController)
+        this.gridOffset = this.movableController.gridOffset
+    }
+
+    rotate() {
+        const pivot = this.mesh.children[0]
+
+        let newRotation = pivot.rotation.toVector3()
+        newRotation.add(new Vector3(0, -Math.PI / 2, 0))
+        pivot.rotation.setFromVector3(newRotation)
+
+        const { size, pos } = this.movableController.grid.rotateArea(this.movableController.gridPosition, this.movableController.tileCount)
+        this.movableController.setSize(size)
+        this.movableController.setPosition(pos)
+        this.editableController.updateHighlightPlane();
+    }
+
+    onMouseScroll() {
+        this.rotate()
     }
 }

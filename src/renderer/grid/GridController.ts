@@ -8,7 +8,7 @@ export default class GridController extends Controller {
     private vertices: Vector3[] = []
     private indices: number[] = []
 
-    private showSquares = false
+    private showSquares = true
     private squares: Object3D[][] = []
 
     private squareMaterial = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide });
@@ -44,6 +44,8 @@ export default class GridController extends Controller {
         
         var line = new LineSegments(geometry, material);
         this.mesh.add(line)
+
+        this.toggleSquares(this.showSquares)
 
         // this.addSquare(1, 1)
     }

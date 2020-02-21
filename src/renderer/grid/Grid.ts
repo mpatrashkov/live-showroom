@@ -70,6 +70,23 @@ export default class Grid {
         }
     }
 
+    rotateArea(pos: Vector2, size: Vector2) {
+        const center = {
+            x: Math.floor(size.x / 2),
+            y: Math.floor(size.y / 2)
+        }
+
+        const z = center.x - center.y
+
+        const newSize = new Vector2(size.y, size.x)
+        const newPos = new Vector2(pos.x + z, pos.y - z)
+
+        // this.setArea(newPos, newSize, 100)
+        // console.table(this.tiles)
+
+        return { pos: newPos, size: newSize }
+    }
+
     // getArea(pos: Vector2) {
     //     let w = 0, h = 0
 
@@ -140,7 +157,7 @@ export default class Grid {
     }
 
     worldToGridPosition(pos: Vector3) {
-        const res = MathHelpers.roundVector(pos.divideScalar(this.tileSize))
+        const res = MathHelpers.roundVector(pos.clone().divideScalar(this.tileSize))
         return new Vector2(
             Math.round(res.x + this.size.x / 2) - 1,
             Math.round(res.z + this.size.y / 2) - 1,

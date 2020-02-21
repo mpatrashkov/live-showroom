@@ -4,7 +4,7 @@ import Entity from "../Entity";
 import EventSystem, { EventType } from "../utils/EventSystem";
 import GridController from "../grid/GridController";
 import Grid from "../grid/Grid";
-import { Object3D, Mesh, Vector2, Euler, MeshBasicMaterial, DoubleSide, PlaneBufferGeometry, Vector3, Line, BufferGeometry, LineBasicMaterial } from "three";
+import { Mesh, Euler, MeshBasicMaterial, DoubleSide, PlaneBufferGeometry, Vector3, Box3 } from "three";
 import Drag from "../utils/Drag";
 import RotatingController from "./RotatingController";
 
@@ -38,6 +38,8 @@ export default class EditableController extends Controller {
         this.movableController.enabled = false
 
         this.rotatingController = this.entity.addController(RotatingController)
+        this.rotatingController.ground = this.ground
+        this.rotatingController.grid = this.grid
         this.rotatingController.enabled = false
 
         EventSystem.on(EventType.EditModeChange, (mode) => {
@@ -45,10 +47,18 @@ export default class EditableController extends Controller {
             
             if(this.editModeEnabled) {
                 if(this.editMode === "move") {
-                    this.movableController.enabled = true;
+                    if(this.grid.isAreaFree(this.movableController.gridPosition, this.movableController.tileCount)) {
+                        this.disableEdit();
+                        this.enableEdit();
+                        this.movableController.enabled = true;
+                        this.rotatingController.enabled = false;
+                    }
                 }
                 else if(this.editMode === "rotate") {
+                    this.disableEdit();
+                    this.enableEdit();
                     this.movableController.enabled = false;
+                    this.rotatingController.enabled = true;
                 }
             }
         })
@@ -68,9 +78,7 @@ export default class EditableController extends Controller {
 
     onMouseUpOnce() {
         if(!Drag.checkDrag()) {
-            // Controller.manager.nextFrame(() => {
-                this.toggleEdit()
-            // })
+            this.toggleEdit()
         }
     }
 
@@ -96,37 +104,56 @@ export default class EditableController extends Controller {
             return
         }
 
-        if(state === false) {
-            this.grid.setArea(this.movableController.gridPosition, this.movableController.tileCount, 100)
-            this.gridController.toggleSquares(false)
-            this.mesh.remove(this.highlightPlane)
-            EditableController.currentController = null
-        }
-        else {
-            this.grid.setArea(this.movableController.gridPosition, this.movableController.tileCount, 0)
-            this.gridController.toggleSquares(true)
-            this.addSquare()
-        }
-
         this.editModeEnabled = state
         this.gridEntity.mesh.visible = state
 
+        if(state === false) {
+            this.disableEdit();
+        }
+        else {
+            this.enableEdit();
+        }
+
         if(this.editMode === "move") {
-            this.movableController.enabled = state
+            this.movableController.enabled = state   
         }
         else if(this.editMode === "rotate") {
             this.rotatingController.enabled = state
         }
     }
 
+    enableEdit() {
+        this.grid.setArea(this.movableController.gridPosition, this.movableController.tileCount, 0)
+        this.gridController.toggleSquares(true)
+        this.showHighlightPlane()
+    }
+
+    disableEdit() {
+        this.grid.setArea(this.movableController.gridPosition, this.movableController.tileCount, 100)
+        this.gridController.toggleSquares(false)
+        this.hideHighlightPlane()
+        EditableController.currentController = null
+    }
+
+    showHighlightPlane() {
+        this.addSquare()
+    }
+
+    hideHighlightPlane() {
+        this.mesh.remove(this.highlightPlane)
+    }
+
+    updateHighlightPlane() {
+        this.hideHighlightPlane()
+        this.showHighlightPlane()
+    }
+
     addSquare() {
         const w = this.movableController.tileCount.x
         const h = this.movableController.tileCount.y
-        const tileSize = this.grid.tileSize
 
         this.highlightPlane = new Mesh(this.squareGeometry, this.squareMaterial)
-        this.highlightPlane.position.copy(this.movableController.boxMin).add(new Vector3(w * tileSize / 2, 0, h * tileSize / 2))
-        this.highlightPlane.position.setY(-this.transform.position.y + 0.035)
+        this.highlightPlane.position.setY(0.035)
         this.highlightPlane.rotation.copy(new Euler(-Math.PI / 2, 0, 0))
 
         this.highlightPlane.scale.set(w, h, 1)

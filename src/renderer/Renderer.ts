@@ -1,9 +1,8 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Object3D, Quaternion, Vector2 } from "three";
+import { Scene, PerspectiveCamera, WebGLRenderer, Raycaster, Object3D, Vector2 } from "three";
 import Controller from "./Controller";
 import Time from "./utils/Time";
 import Entity from "./Entity";
 
-import { CopyShader } from "three/examples/jsm/shaders/CopyShader";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";

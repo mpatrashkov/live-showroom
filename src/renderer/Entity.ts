@@ -25,6 +25,10 @@ export default class Entity {
         return controller;
     }
 
+    removeController<T extends Controller>(type: new (entity: Entity) => T) {
+        this.controllers = this.controllers.filter(controller => !(controller instanceof type))
+    }
+
     getController<T extends Controller>(type: new (entity: Entity) => T): T | null {
         for(let controller of this.controllers) {
             if(controller instanceof type) {
