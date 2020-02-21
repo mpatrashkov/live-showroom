@@ -27,16 +27,18 @@ export default class ModelController extends Controller {
                         child.castShadow = true;
                         child.receiveShadow = true;
                     })
-
-                    const pivot = new Group()
-                    pivot.castShadow = true
-                    pivot.receiveShadow = true
-                    pivot.add(object)
-
-                    this.mesh.add(pivot);
                     
-                    // this.mesh.add(new BoxHelper(this.mesh, new Color(0x00ffff)))
-                    
+                    if (window.location.pathname === '/playground') {
+                        const pivot = new Group()
+                        pivot.castShadow = true
+                        pivot.receiveShadow = true
+                        pivot.add(object)
+
+                        this.mesh.add(pivot);
+                    } else {
+                        this.mesh.add(object)
+                    }
+
                     // this.mesh.add(object);
 
                     // console.log(pivot)
@@ -52,7 +54,7 @@ export default class ModelController extends Controller {
 
                     EventSystem.fire(EventType.ModelLoaded, model);
                     resolve(model)
-                })  
+                })
             })
         })
     }

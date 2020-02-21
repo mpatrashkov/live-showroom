@@ -16,7 +16,7 @@ export default class MovableController extends Controller {
     private dev = false
 
     tileCount = new Vector2()
-    gridPosition
+    gridPosition: Vector2 
 
     private editableController: EditableController
 

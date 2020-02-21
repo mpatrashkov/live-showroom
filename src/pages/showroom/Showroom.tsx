@@ -320,10 +320,6 @@ class Showroom extends React.Component<ShowroomProperties, ShowroomState> {
             })
         }
     }
-
-    async componentDidUpdate() {
-
-    }
 }
 
 export default withUserContext(Showroom)
