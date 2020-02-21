@@ -1,6 +1,7 @@
 import Controller from "../Controller";
 import DesignCameraOrbitingController from "./DesignCameraOrbitingController";
 import { Vector3 } from "three";
+import EventSystem, { EventType } from "../utils/EventSystem";
 
 export default class DesignCameraController extends Controller {
     private cameraStartingY = 20;
@@ -15,6 +16,15 @@ export default class DesignCameraController extends Controller {
 
         const cameraOrbitController = this.entity.addController(DesignCameraOrbitingController)
         cameraOrbitController.targetPostion = new Vector3(0, 0, 0)
+
+        EventSystem.on(EventType.DisableRotateCamera, () => {
+            console.log(1)
+            cameraOrbitController.enabled = false;
+        })
+
+        EventSystem.on(EventType.EnableRotateCamera, () => {
+            cameraOrbitController.enabled = true;
+        })
     }
 
     update() {

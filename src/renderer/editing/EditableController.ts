@@ -48,6 +48,7 @@ export default class EditableController extends Controller {
             if(this.editModeEnabled) {
                 if(this.editMode === "move") {
                     if(this.grid.isAreaFree(this.movableController.gridPosition, this.movableController.tileCount)) {
+                        EventSystem.fire(EventType.EnableRotateCamera);
                         this.disableEdit();
                         this.enableEdit();
                         this.movableController.enabled = true;
@@ -55,6 +56,7 @@ export default class EditableController extends Controller {
                     }
                 }
                 else if(this.editMode === "rotate") {
+                    EventSystem.fire(EventType.DisableRotateCamera);
                     this.disableEdit();
                     this.enableEdit();
                     this.movableController.enabled = false;
@@ -115,10 +117,17 @@ export default class EditableController extends Controller {
         }
 
         if(this.editMode === "move") {
-            this.movableController.enabled = state   
+            this.movableController.enabled = state
         }
         else if(this.editMode === "rotate") {
             this.rotatingController.enabled = state
+
+            if(!state) {
+                EventSystem.fire(EventType.EnableRotateCamera);
+            }
+            else {
+                EventSystem.fire(EventType.DisableRotateCamera);
+            }
         }
     }
 

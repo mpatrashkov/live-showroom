@@ -5,7 +5,9 @@ export enum EventType {
     OrbitableClosed,
     ModelLoaded,
     EditModeChange,
-    GroundClicked
+    GroundClicked,
+    EnableRotateCamera,
+    DisableRotateCamera
 }
 
 type EventDataType = {
@@ -13,7 +15,9 @@ type EventDataType = {
     [EventType.OrbitableClosed]: never,
     [EventType.ModelLoaded]: string,
     [EventType.EditModeChange]: string,
-    [EventType.GroundClicked]: never
+    [EventType.GroundClicked]: never,
+    [EventType.EnableRotateCamera]: never,
+    [EventType.DisableRotateCamera]: never,
 }
 
 export default class EventSystem {
