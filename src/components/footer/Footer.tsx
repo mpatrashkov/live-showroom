@@ -9,7 +9,6 @@ export default class Footer extends React.Component {
                     <li><a href="#">HOME</a></li>
                     <li><a href="#">LIVE SHOWROOM</a></li>
                     <li><a href="#">PLAYGROUND</a></li>
-                    <li><a href="#">SHOP</a></li>
                 </ul>
                 <ul className="contacts">
                     <li>Facebook:<a href="#">Georgi Atanasov</a></li>

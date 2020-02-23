@@ -11,9 +11,15 @@ import FloorController from '../../renderer/FloorController';
 import { serverUrl } from '../../config/config';
 import OrbitableController from '../../renderer/OrbitableController';
 import ModelController from '../../renderer/ModelController';
+import { ProgressBar } from 'react-bootstrap';
+import { Button } from 'antd';
+import EventSystem, { EventType } from '../../renderer/utils/EventSystem';
 
 interface UserRoomState {
-    renderer: GameManager | null
+    renderer: GameManager | null,
+    roomDesign: [],
+    isButtonDisabled: boolean,
+    loadedModels: number
 }
 
 interface UserRoomProperties {
@@ -31,7 +37,10 @@ class UserRoom extends React.Component<UserRoomProperties, UserRoomState> {
         super(props)
 
         this.state = {
-            renderer: null
+            renderer: null,
+            roomDesign: [],
+            isButtonDisabled: true,
+            loadedModels: 0
         }
     }
 
@@ -133,13 +142,28 @@ class UserRoom extends React.Component<UserRoomProperties, UserRoomState> {
             renderer.scene.add(door)
         })
 
+        if (this.state.loadedModels < roomDesign.length - 1) {
+            EventSystem.on(EventType.ModelLoaded, () => {
+                let loaded = this.state.loadedModels
+                this.setState({
+                    loadedModels: loaded + 1
+                }, () => {
+                    if (this.state.loadedModels === roomDesign.length) {
+                        this.setState({
+                            isButtonDisabled: false
+                        })
+                    }
+                })
+            })
+        }
+
         roomDesign.forEach((m) => {
             console.log(m)
             const cube = renderer.addEntity(m.name);
             cube.addController(OrbitableController).cameraController = cameraController;
             let cubeModelController = cube.addController(ModelController);
             if (m.material) {
-                cubeModelController.load(m.path, m.material)
+                cubeModelController.load(m.path, m.material, m.rotation)
             }
             cube.transform.position.z = m.position.z;
             cube.transform.position.x = m.position.x;
@@ -157,15 +181,37 @@ class UserRoom extends React.Component<UserRoomProperties, UserRoomState> {
         light.position.set(10, 10, 2);
         renderer.scene.add(light);
 
-        this.setState({renderer})
+        this.setState({renderer, roomDesign})
     }
 
     render() {
         return (
             <div className="user-room page">
                 <div ref={el => this.mount = el}></div>
+                <div className="user-room-start-screen">
+                    <h1>Welcome To Our Virtual Showroom</h1>
+                    <div className="user-room-info">
+                    <p>Step Inside Our Virtual Showroom and Explore the Huge Variety Of Furniture That We Offer.</p>
+                        <p>Jump into our virtually created world and choose the furniture that best fits your style. And not only that, you can see how the product you chose looks in a real environment! </p>
+                        <p>Quit going around your town visiting every furniture shop, just to find the perfect sofa in the last one. Now you can find everything at one place and even compare them in a perfect world simulation!</p>
+                        <p>This is one of the most if not the most intuitive virtual showroom available to the public. With good user experience and interface our showroom offers easy and effective way of exploring the world of interior design.</p>
+                    </div>
+                    <div className="actions">
+                        <ProgressBar animated now={this.state.loadedModels * (100 / this.state.roomDesign.length)} />
+                        <Button type="primary" id="enter-btn" disabled={this.state.isButtonDisabled} onClick={this.enterUserRoom}>Enter</Button>
+                    </div>
+                </div>
             </div>
         )
+    }
+
+    enterUserRoom = () => {
+        console.log("hi")
+        let div = document.getElementsByClassName("user-room-start-screen")[0];
+        div.classList.add("enter-user-room")
+        setTimeout(() => {
+            div.classList.add("remove-enter-screen")
+        }, 300)
     }
 }
 

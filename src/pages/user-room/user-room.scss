@@ -1,0 +1,45 @@
+.user-room-start-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #FFF;
+    transition: opacity 0.3s ease-in;
+    padding: 2rem 3rem;
+
+    h1 {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .user-room-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 3rem 0;
+    }
+
+    p:first-child {
+        font-size: 1.5em;
+        width: 60%;
+    }
+
+    p:not(:first-child) {
+        width: 60%;
+    }
+}
+
+.enter-user-room {
+    opacity: 0;
+}
+
+.remove-enter-screen {
+    display: none;
+}
+
+.actions {
+    display: grid;
+    margin: auto;
+    width: 50%;
+    grid-template-columns: 1fr 0.2fr;
+    grid-column-gap: 2rem;
+}

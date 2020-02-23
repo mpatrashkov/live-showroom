@@ -2,10 +2,10 @@ import Controller from "./Controller"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import EventSystem, { EventType } from "./utils/EventSystem";
-import { Object3D, Vector3, Box3, Group, BoxHelper, Color } from "three";
+import { Object3D, Vector3, Box3, Group, BoxHelper, Color, Euler } from "three";
 
 export default class ModelController extends Controller {
-    load(model: string, material: string) {
+    load(model: string, material: string, rotation = new Euler(0,0,0)) {
         return new Promise((resolve, reject) => {
             const objLoader = new OBJLoader();
             const mtlLoader = new MTLLoader();
@@ -33,9 +33,10 @@ export default class ModelController extends Controller {
                         pivot.castShadow = true
                         pivot.receiveShadow = true
                         pivot.add(object)
-
+                        object.rotation.copy(rotation)
                         this.mesh.add(pivot);
                     } else {
+                        object.rotation.copy(rotation)
                         this.mesh.add(object)
                     }
 

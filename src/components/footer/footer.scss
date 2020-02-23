@@ -17,6 +17,11 @@ li {
     padding-bottom: 2em;
 
     .navigation {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        
         li:not(:first-child) {
             margin-top: 0.5rem;
         }

@@ -7,7 +7,9 @@ import { serverUrl } from '../../config/config';
 
 interface LoginStateInterface {
     username: string,
-    password: string
+    password: string,
+    image: string,
+    load: boolean
 }
 
 interface LoginProperties {
@@ -24,7 +26,9 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
 
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            image: 'https://www.deltalight.com/frontend/files/projects/images/source/002921_REA11.jpg',
+            load: false
         }
     }
 
@@ -47,7 +51,7 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state)
+            body: JSON.stringify({ username: this.state.username, password: this.state.password })
         })
         let result = await data.json()
         if (result.token) {
@@ -77,41 +81,55 @@ class Login extends React.Component<LoginProperties, LoginStateInterface> {
         }
 
         return (
-            <div className="login-page">
-                <div className="login-info">
-                    <h1>Unlock Many Amazing Features!</h1>
-                    <div className="login-info-img">
-                        <img src="https://www.deltalight.com/frontend/files/projects/images/source/002921_REA11.jpg" alt="" />
-                    </div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam soluta inventore animi. Maiores voluptates nam aspernatur unde minima nobis sint, ea harum dignissimos, numquam perspiciatis architecto ipsum a. Officia, nostrum?</p>
-                </div>
-                <Form className="login-form" onSubmit={this.onSubmit}>
-                    <Form.Item>
-                        <label htmlFor="username">Username</label>
-                        <Input
-                            name="username" id="username"
-                            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            placeholder="Username"
-                            onChange={this.onUsernameChange}
-                        />
-                    </Form.Item>
-                    <Form.Item>
-                        <label htmlFor="password">Password</label>
-                        <Input
-                            name="password" id="password"
-                            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            type="password"
-                            placeholder="Password"
-                            onChange={this.onPasswordChange}
-                        />
-                    </Form.Item>
-                    <Form.Item className="form-buttons">
-                        <Button type="primary" htmlType="submit" className="login-form-button">Log in</Button>
-                        <p>Don't have an account? <Link className="register-link" to="/signup">Register now!</Link></p>
-                    </Form.Item>
-                </Form>
-            </div>
+            <>
+                {
+                    this.state.load ? (
+                        <div className="login-page">
+                            <div className="login-info">
+                                <h1>Unlock Many Amazing Features!</h1>
+                                <div className="login-info-img">
+                                    <img src={this.state.image} alt="" />
+                                </div>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam soluta inventore animi. Maiores voluptates nam aspernatur unde minima nobis sint, ea harum dignissimos, numquam perspiciatis architecto ipsum a. Officia, nostrum?</p>
+                            </div>
+                            <Form className="login-form" onSubmit={this.onSubmit}>
+                                <Form.Item>
+                                    <label htmlFor="username">Username</label>
+                                    <Input
+                                        name="username" id="username"
+                                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                        placeholder="Username"
+                                        onChange={this.onUsernameChange}
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <label htmlFor="password">Password</label>
+                                    <Input
+                                        name="password" id="password"
+                                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                        type="password"
+                                        placeholder="Password"
+                                        onChange={this.onPasswordChange}
+                                    />
+                                </Form.Item>
+                                <Form.Item className="form-buttons">
+                                    <Button type="primary" htmlType="submit" className="login-form-button">Log in</Button>
+                                    <p>Don't have an account? <Link className="register-link" to="/signup">Register now!</Link></p>
+                                </Form.Item>
+                            </Form>
+                        </div>
+                    ) : null
+                }
+            </>
         )
+    }
+
+    componentDidMount() {
+        let img = new Image();
+        img.src = this.state.image;
+        img.onload = () => {
+            this.setState({ load: true })
+        }
     }
 }
 

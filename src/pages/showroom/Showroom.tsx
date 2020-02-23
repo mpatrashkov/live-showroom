@@ -268,9 +268,9 @@ class Showroom extends React.Component<ShowroomProperties, ShowroomState> {
                     <h1>Welcome To Our Virtual Showroom</h1>
                     <div className="showroom-info">
                         <p>Step Inside Our Virtual Showroom and Explore the Huge Variety Of Furniture That We Offer.</p>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid illum laboriosam nisi pariatur, dignissimos error saepe quisquam magni voluptatem, repellendus quibusdam repudiandae cupiditate possimus sapiente, perspiciatis aspernatur vero nostrum similique.</p>
+                        <p>Jump into our virtually created world and choose the furniture that best fits your style. And not only that, you can see how the product you chose looks in a real environment! </p>
+                        <p>Quit going around your town visiting every furniture shop, just to find the perfect sofa in the last one. Now you can find everything at one place and even compare them in a perfect world simulation!</p>
+                        <p>This is one of the most if not the most intuitive virtual showroom available to the public. With good user experience and interface our showroom offers easy and effective way of exploring the world of interior design.</p>
                     </div>
                     <div className="actions">
                         <ProgressBar animated now={this.state.loadedModels * (100 / this.state.defaultModels.length)} />

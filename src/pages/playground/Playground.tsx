@@ -1,7 +1,7 @@
 import React from "react"
 import GameManager from "../../renderer/Renderer";
 import SunController from "../../renderer/SunController";
-import { Vector3, Box3, Quaternion, Vector2 } from "three";
+import { Vector3, Box3, Quaternion, Vector2, Euler } from "three";
 import GroundController from "../../renderer/GroundController";
 import TestCubeController from "../../renderer/TestCubeController";
 import DesignCameraController from "../../renderer/design-camera/DesignCameraController";
@@ -102,9 +102,11 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                 
                 let objectModelController = object.addController(ModelController)
                 
-                let m = await objectModelController.load(path, material)       
+                let m = await objectModelController.load(path, material, e.rotation)       
+                
                 
                 const editableController = object.addController(EditableController)
+                //object.mesh.children[0].rotation.copy(e.rotation)
                 
                 editableController.ground = this.state.ground
                 editableController.gridEntity = this.state.gridEntity
@@ -112,11 +114,10 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                 Controller.manager.nextFrame(() => {
                     let movable = object.getController(MovableController)
                     movable.gridPosition = new Vector2(e.gridPosition.x, e.gridPosition.y)
-                    object.transform.rotation = new Quaternion(e.rotation._x, e.rotation._y, e.rotation._z, e.rotation._w);
                 })
 
                 
-                console.log(e.position, object.transform.position)
+                console.log(e.gridPosition, object.transform.position)
                 console.log(object)
             });
         }
@@ -144,7 +145,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
     render() {
         if (!this.props.isLoggedIn) {
             return (
-                <Redirect to="/" />
+                <Redirect to="/signin" />
             )
         }
 
@@ -163,7 +164,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                 <div className="playground-inventory" style={(this.state.inventory.length > 0) ? { "display": "block" } : null}>
                     {
                         this.state.inventory.map((m) => (
-                            <div className="playground-inventory-item">
+                            <div key={m.name} className="playground-inventory-item">
                                 <h3>{m.name}</h3>
                                 <div className="playground-inventory-item-img" onClick={() => this.onAddModel(m)}>
                                     <img src={m.image} alt="" />
@@ -204,7 +205,7 @@ class Playground extends React.Component<PlaygroundProperties, PlaygroundState> 
                 let entity = {
                     gridPosition: movable.gridPosition,
                     position: e.transform.position,
-                    rotation: e.transform.rotation,
+                    rotation: new Euler().setFromVector3(e.mesh.children[0].rotation.toVector3().add(e.mesh.children[0].children[0].rotation.toVector3())),
                     path: found.path,
                     material: found.material,
                     name: e.name
